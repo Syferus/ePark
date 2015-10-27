@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Changephoto";
+}
+
+<script type="text/javascript">
+
+    function ShowPopUp() {
+       
+        window.open('/Photo/Index/', "wndPopUp", 'width=720,height=400,left=100,top=100,resizable=no');
+        
+    }
+
+</script>
+
+
+<img id="Userpic" src="@ViewBag.pic" />
+<br />
+<input type="button" id="btnSave" value="Take Photo" onclick="ShowPopUp();" />
+
