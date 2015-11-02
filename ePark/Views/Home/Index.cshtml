@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+    @section scripts
+{
+        <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
+        </script>
+        <script>
+            $("#Camera").webcam({
+                width: 320,
+                height: 240,
+                mode: "save",
+                swffile: "@Url.Content("~/Scripts/jscam.swf")",
+                onTick: function() {},
+                onSave: function() {
+                },
+                onCapture: function() {
+                    webcam.save("@Url.Content("~/Home/Capture")/");
+                },
+                debug: function() {},
+                onLoad: function() {}
+            });
+        </script>     
+        
+    }
+
+    <h2>Index</h2>
+
+<div id="Camera"></div>
+<div>
+    <input type="button" value="Capture Reference" onclick="showCapture()">
+
+    <input type="button" value="Shoot!" onclick="webcam.capture();" />
+</div>
+<div>
+    <input type="button" value="Load Pictures" onclick="compare('/WebcamImages/comparison.jpg', '/WebcamImages/reference.jpg', function(result) { alert('There is a ' + result.toFixed(2) + '% difference between the 2 images') })">
+</div>
+<div id="images"></div>
+
+<script>
+    function getImageData(url, callback) {
+        var img = document.createElement('img');
+        //var canvas = document.getElementById('myCanvas');
+        var canvas = document.createElement('canvas');
+        
+
+        img.onload = function () {
+            canvas.id     = "can" + url;
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, img.width,img.height );
+            callback(ctx.getImageData(0, 0, img.width, img.height));
+            canvas.style.border = "1px solid";
+        };
+
+        img.src = url;
+
+        document.getElementById('images').appendChild(canvas);
+    }
+
+    function compare(firstImage, secondImage, callback) {
+        getImageData(firstImage, function (img1) {
+            getImageData(secondImage, function (img2) {
+                if (img1.width !== img2.width || img1.height != img2.height) {
+                    callback(NaN);
+                    return;
+                }
+
+                var diff = 0;
+
+                for (var i = 0; i < img1.data.length / 4; i++) {
+                    diff += Math.abs(img1.data[4 * i + 0] - img2.data[4 * i + 0]) / 255;
+                    diff += Math.abs(img1.data[4 * i + 1] - img2.data[4 * i + 1]) / 255;
+                    diff += Math.abs(img1.data[4 * i + 2] - img2.data[4 * i + 2]) / 255;
+                }
+
+                callback(100 * diff / (img1.width * img1.height * 3));
+            });
+        });
+    };
+
+    function showCapture() {
+        window.open('/Home/ChangeReferencePhoto/', "wndPopUp", 'width=720,height=400,left=100,top=100,resizable=no');
+    }
+</script>

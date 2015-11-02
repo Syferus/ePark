@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "ChangeReferencePhoto";
+}
+
+@section scripts
+{
+    <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
+    
+    </script>
+    <script>
+        $("#Camera").webcam({
+            width: 320,
+            height: 240,
+            mode: "save",
+            swffile: "@Url.Content("~/Scripts/jscam.swf")",
+            onTick: function() {},
+            onSave: function() {
+            },
+            onCapture: function() {
+                webcam.save("@Url.Content("~/Home/CaptureReference")/");
+            },
+            debug: function() {},
+            onLoad: function() {}
+        });
+    </script>
+}
+<div id="Camera"></div>
+<input type="button" value="Take reference photo" onclick="webcam.capture();"/>
+<input type="button" value="close" onclick="window.close();"/>
+
