@@ -1,6 +1,6 @@
-### A MVC app that analyses a car park and outputs free spaces to a webapp
+### An app that displays the amount of free parking spaces near your location
 
-It checks if a space is occupied and displays the amount of spaces free when a user checks on their phone
+An MEAN application that compares images to determine if parking spaces are free, and then outputs the results to a mobile web app
 
 
 
