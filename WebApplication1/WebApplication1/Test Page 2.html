@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Move in Canvas</title>
+
+    <script src="https://code.createjs.com/createjs-2015.05.21.min.js"></script>
+    <script>
+        //  var stage, output, circle;
+
+        //function init() {
+        //    stage = new createjs.Stage("myCanvas");
+
+        //    stage.mouseMoveOutside = true;
+
+        //    circle = new createjs.Shape();
+        //    circle.graphics.beginFill("red").drawCircle(0, 0, 50);
+
+        //    var dragger = new createjs.Container();
+        //    dragger.x = dragger.y = 100;
+        //    dragger.addChild(circle);
+        //    stage.addChild(dragger);
+
+        //    dragger.on("pressmove", function (evt) {
+
+        //        // currentTarget will be the container that the event listener was added to:
+        //        evt.currentTarget.x = evt.stageX;
+        //        evt.currentTarget.y = evt.stageY;
+        //        // make sure to redraw the stage to show the change:
+        //        stage.update();
+        //    });
+
+        //    stage.update();
+        //}
+
+        var stage;
+        var image;
+        function init() {
+            stage = new createjs.Stage("myCanvas");
+
+            image = new Image();
+            image.src = "empty_carpark.jpg";
+
+            console.log(image.naturalHeight)
+
+            image.onload = handleImageLoad;
+        }
+
+        function handleImageLoad(event) {
+            var image = event.target;
+            var bitmap = new createjs.Bitmap(image);
+            stage.addChild(bitmap);
+
+            stage.update();
+        }
+    </script>
+</head>
+<body onload="init()">
+    <!--onload="displayImage()">-->
+    <canvas id="myCanvas" style="border:dashed" width="800" height="800"></canvas>
+</body>
+</html>

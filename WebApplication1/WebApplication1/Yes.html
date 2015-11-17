@@ -1,0 +1,144 @@
+﻿<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Parking Space Define</title>
+    <script>
+        var canvas
+        var points = []
+        var counter = 0;
+
+        function init() {
+            canvas = document.getElementById("canvas_1");
+            canvas.addEventListener('dblclick', doDoubleClick, false);
+        }
+
+        function doDoubleClick(event) {
+            canvas_x = event.pageX - this.offsetLeft;
+            canvas_y = event.pageY - this.offsetTop;
+
+            if (counter < 4) {
+                draw(canvas_x, canvas_y)
+                points[counter] = new Array(canvas_x, canvas_y, 0);
+                counter++
+            }
+
+            else {
+                drawLines()
+            }
+
+        }
+
+        function draw(x, y) {
+            var context = canvas.getContext('2d');
+            var centerX = x
+            var centerY = y
+            var radius = 10;
+
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+            context.fillStyle = 'green';
+            context.fill();
+            context.stroke();
+        }
+
+        function drawLines() {
+            var ctx = canvas.getContext("2d");
+
+            ctx.beginPath();
+            ctx.moveTo(points[0][0], points[0][1]);
+            ctx.lineTo(points[1][0], points[1][1]);
+            ctx.lineTo(points[2][0], points[2][1]);
+            ctx.lineTo(points[3][0], points[3][1]);
+            ctx.lineTo(points[0][0], points[0][1]);
+            ctx.stroke();
+            other()
+        }
+
+        function lineDistance(x1, y1, x2, y2) {
+            var xs = 0;
+            var ys = 0;
+
+            xs = x2 - x1;
+            xs = xs * xs;
+
+            ys = y2 - y1;
+            ys = ys * ys;
+
+            return Math.sqrt(xs + ys);
+
+        }
+
+        function other() {
+            var distA = lineDistance(points[0][0], points[0][1], points[1][0], points[1][1])
+            var distB = lineDistance(points[1][0], points[1][1], points[2][0], points[2][1])
+            var distC = lineDistance(points[2][0], points[2][1], points[3][0], points[3][1])
+            var distD = lineDistance(points[3][0], points[3][1], points[0][0], points[0][1])
+
+            var context = canvas.getContext("2d");
+
+            context.moveTo(points[0][0], points[0][1])
+
+
+            var AngleA = Math.atan2(points[1][1] - points[0][1], points[1][0] - points[0][0]);
+            var Per_Frame_DistanceA = distA / 30;
+            var SinA = Math.sin(AngleA) * Per_Frame_DistanceA;//add to y
+            var CosA = Math.cos(AngleA) * Per_Frame_DistanceA;//add to x
+
+
+            var AngleB = Math.atan2(points[2][1] - points[1][1], points[2][0] - points[1][0]);
+            var Per_Frame_DistanceB = distB / 30;
+            var SinB = Math.sin(AngleB) * Per_Frame_DistanceB;//add to y
+            var CosB = Math.cos(AngleB) * Per_Frame_DistanceB;//add to x
+
+
+            var AngleC = Math.atan2(points[3][1] - points[2][1], points[3][0] - points[2][0]);
+            var Per_Frame_DistanceC = distC / 30;
+            var SinC = Math.sin(AngleC) * Per_Frame_DistanceC;//add to y
+            var CosC = Math.cos(AngleC) * Per_Frame_DistanceC;//add to x
+
+
+            var AngleD = Math.atan2(points[3][1] - points[0][1], points[3][0] - points[0][0])//(points[0][1] - points[3][1], points[0][0] - points[3][0]);
+            var Per_Frame_DistanceD = distD / 30;
+            var SinD = Math.sin(AngleD) * Per_Frame_DistanceD;//add to y
+            var CosD = Math.cos(AngleD) * Per_Frame_DistanceD;//add to x
+
+            var AX = points[0][0]
+            var AX1 = points[0][0]
+            var BX = points[1][0]
+            var CX = points[2][0]
+            var DX = points[3][0]
+
+            var AY = points[0][1]
+            var AY1 = points[0][1]
+            var BY = points[1][1]
+            var CY = points[2][1]
+            var DY = points[3][1]
+
+
+            for (var i = 0; i < 30; i++) {
+                context.moveTo(AX += CosA, AY += SinA);
+                context.lineTo(DX -= CosC, DY -= SinC);
+            }
+            context.stroke();
+            for (var j = 0; j < 30; j++) {
+                context.moveTo(BX += CosB, BY += SinB);
+                context.lineTo(AX1 += CosD, AY1 += SinD);
+            }
+            context.stroke();
+        }
+
+
+
+      
+
+    </script>
+</head>
+
+<body onload="init()">
+    <canvas width="400" height="400" id="canvas_1" style="border-style:dotted ">
+        Canvas Not Supported
+    </canvas>
+</body>
+
+</html>
