@@ -4,14 +4,22 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ePark.ViewModel;
 
 namespace ePark.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
+
+        public ActionResult Index(string jsonPoints)
         {
-            return View();
+            CamViewModel cvm = new CamViewModel();
+            cvm.JSONstring = jsonPoints;
+            return View(cvm);
         }
 
         public void Capture()
