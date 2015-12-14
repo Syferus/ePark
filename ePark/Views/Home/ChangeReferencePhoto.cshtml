@@ -36,6 +36,7 @@
             $("#canvas").css("background-image", "url(/WebcamImages/reference.jpg)");
         };
 
+
         function Node(x, y) {
             var circle = new createjs.Shape();
             circle.x = x;
@@ -152,10 +153,10 @@
         }
 
         function other() {
-            var distA = lineDistance(points[0][0], points[0][1], points[1][0], points[1][1])
-            var distB = lineDistance(points[1][0], points[1][1], points[2][0], points[2][1])
-            var distC = lineDistance(points[2][0], points[2][1], points[3][0], points[3][1])
-            var distD = lineDistance(points[3][0], points[3][1], points[0][0], points[0][1])
+            var distA = lineDistance(points[0][0], points[0][1], points[1][0], points[1][1]);
+            var distB = lineDistance(points[1][0], points[1][1], points[2][0], points[2][1]);
+            var distC = lineDistance(points[2][0], points[2][1], points[3][0], points[3][1]);
+            var distD = lineDistance(points[3][0], points[3][1], points[0][0], points[0][1]);
 
             var context = canvas.getContext("2d");
 
@@ -186,17 +187,17 @@
             var SinD = Math.sin(AngleD) * Per_Frame_DistanceD; //add to y
             var CosD = Math.cos(AngleD) * Per_Frame_DistanceD; //add to x
 
-            var AX = points[0][0]
-            var AX1 = points[0][0]
-            var BX = points[1][0]
-            var CX = points[2][0]
-            var DX = points[3][0]
+            var AX = points[0][0];
+            var AX1 = points[0][0];
+            var BX = points[1][0];
+            var CX = points[2][0];
+            var DX = points[3][0];
 
-            var AY = points[0][1]
-            var AY1 = points[0][1]
-            var BY = points[1][1]
-            var CY = points[2][1]
-            var DY = points[3][1]
+            var AY = points[0][1];
+            var AY1 = points[0][1];
+            var BY = points[1][1];
+            var CY = points[2][1];
+            var DY = points[3][1];
 
 
             for (var i = 0; i < times; i++) {
@@ -267,7 +268,7 @@
             $.ajax({
                 type: 'POST',
                 datatype: 'text',
-                url: '/Home/Index',
+                url: "/Home/Index/",
                 data: { jsonPoints: jsonPoints },
                 success: function(data) {},
                 error: function(err) { alert(err); }

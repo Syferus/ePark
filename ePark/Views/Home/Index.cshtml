@@ -36,12 +36,10 @@
     <input type="button" value="Shoot!" class="btn btn-primary" onclick="webcam.capture();" />
 </div>
 <div>
-    <input type="button" value="Load Pictures" class="btn btn-success" onclick="cutImages()"  @*onclick="compare('/WebcamImages/comparison.jpg', '/WebcamImages/reference.jpg', function(result) { })"*@>
+    <input type="button" value="Compare Pictures" class="btn btn-success"  onclick="compare('/WebcamImages/comparison.jpg', '/WebcamImages/reference.jpg', function(result) { })">
 </div>
 <div id="images"></div>
-<div>
-    <canvas id="myCanvas2"></canvas>
-</div>
+
 <select id="lstOutputs" size="5" style="width:300px"></select>
 
 <script>
