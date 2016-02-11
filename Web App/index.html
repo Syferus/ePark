@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <title>ePark</title>
+		<meta name="viewport" content="width=dvice-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+		<link rel="stylesheet" href="css/jqeury.mobile.theme.min.css" />
+
+		<link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+		
+		<link rel="stylesheet" href="css/jquery.mobile.min.css" />
+		
+		<link rel="stylesheet" href="css/fonts.css" />
+				
+		<link rel="stylesheet" href="css/style.css" />
+		
+		<link rel="stylesheet" href="css/ray.css" />
+				
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		
+		<script src="js/jquery.min.js"></script>
+
+		<script>
+		$(document).bind('mobileinit',function(){
+		    $.mobile.pushStateEnabled = false;
+		});</script>
+		
+		<script src="js/jquery.mobile.min.js"></script>
+		
+		<script src="js/owl.carousel.min.js"></script>
+	
+		<script src="js/scripts.js"></script>
+    <style>
+      #map {
+        width: 1000px;
+        height: 1000px;
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script>
+      function initialize() {
+        var mapCanvas = document.getElementById('map');
+        var styles = [{"elementType":"geometry","stylers":[{"hue":"#ff4400"},{"saturation":-68},{"lightness":-4},{"gamma":0.72}]},{"featureType":"road","elementType":"labels.icon"},{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"hue":"#0077ff"},{"gamma":3.1}]},{"featureType":"water","stylers":[{"hue":"#00ccff"},{"gamma":0.44},{"saturation":-33}]},{"featureType":"poi.park","stylers":[{"hue":"#44ff00"},{"saturation":-23}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"hue":"#007fff"},{"gamma":0.77},{"saturation":65},{"lightness":99}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"gamma":0.11},{"weight":5.6},{"saturation":99},{"hue":"#0091ff"},{"lightness":-86}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"lightness":-48},{"hue":"#ff5e00"},{"gamma":1.2},{"saturation":-23}]},{"featureType":"transit","elementType":"labels.text.stroke","stylers":[{"saturation":-64},{"hue":"#ff9100"},{"lightness":16},{"gamma":0.47},{"weight":2.7}]}];
+
+        var styledMap = new google.maps.StyledMapType(styles, {name: "Styled Map"});
+
+        var mapOptions = {
+          center: new google.maps.LatLng(44.5403, -78.5463),
+          zoom: 8,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        var map = new google.maps.Map(mapCanvas, mapOptions)
+
+        map.mapTypes.set('map_style', styledMap);
+        map.setMapTypeId('map_style');
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+    </head>
+    <body>
+    
+        <div data-role="page">
+        
+            <div data-role="panel" data-display="push" id="sidebar" data-theme="c">
+            
+	            	<form id="sidebar-searchform">
+	            	    <input data-role="none" class="ray-input" type="text" name="s" placeholder="Search for a park" />
+	            	    <input data-role="none" class="ray-button" type="submit" name="submit" value="" />
+	            	</form>
+	            	
+	            	<h4>Navigation</h4>
+	            	
+	            	<ul data-role="listview">
+
+	            	    <li data-icon='false'><i class="fa fa-briefcase"></i><a data-ajax="false" href="">History</a></li>
+	            	    <li data-icon='false'><i class="fa fa-home"></i><a data-ajax="false" href="">Nearest Park</a></li>
+	            	    <li data-icon='false'><i class="fa fa-shopping-cart"></i><a data-ajax="false" href="">Pay Parking</a></li>
+	            	    <li data-icon='false'><i class="fa fa-user"></i><a data-ajax="false" href="">Your Account</a></li>
+	            		<li data-icon='false'><i class="fa fa-list"></i><a data-fajax="false" href="">About Us</a></li></ul>
+            </div>
+            
+            <form id="searchform">
+                <input data-role="none" class="ray-input" type="text" name="s" placeholder="Search for a park" />
+                <input data-role="none" class="ray-button" type="submit" name="submit" value="" />
+            </form>
+    
+            <div data-role="header" data-tap-toggle="false" data-theme='c'>
+                <a href='#sidebar' data-role="none" id="a-sidebar"><img src="images/menu-icon.png" alt="sidebar" id="header-menu-icon" /></a>
+                <h1 class="header-title">EPARK</h1>
+                <a href='#' data-role="none" id="a-search"><img src="images/search-icon.png" alt="search" id="header-search-icon" /></a>
+            </div>
+            
+            <div data-role="content">
+            	<div id="map"></div>
+            </div>
+
+    </body>
+</html>
