@@ -1,6 +1,8 @@
-﻿
+﻿@using System.Security.Policy
+@model ePark.ViewModel.CamViewModel
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Home Page";
 }
     @section scripts
 {
@@ -25,32 +27,34 @@
         
     }
 
-    <h2>Index</h2>
+    <h2>Home Page</h2>
 
 <div id="Camera"></div>
 <div>
-    <input type="button" value="Capture Reference" onclick="showCapture()">
-
-    <input type="button" value="Shoot!" onclick="webcam.capture();" />
+    @*<input type="button" value="Capture Reference" onclick="showCapture()">*@
+@Html.ActionLink("Capture Reference Image", "ChangeReferencePhoto", null, new {@class="btn btn-warning"})
+    <input type="button" value="Shoot!" class="btn btn-primary" onclick="webcam.capture();" />
 </div>
 <div>
-    <input type="button" value="Load Pictures" onclick="compare('/WebcamImages/comparison.jpg', '/WebcamImages/reference.jpg', function(result) { alert('There is a ' + result.toFixed(2) + '% difference between the 2 images') })">
+    <input type="button" value="Compare Pictures" class="btn btn-success"  onclick="compare('/WebcamImages/comparison.jpg', '/WebcamImages/reference.jpg', function(result) { })">
 </div>
 <div id="images"></div>
+
+<select id="lstOutputs" size="5" style="width:300px"></select>
 
 <script>
     function getImageData(url, callback) {
         var img = document.createElement('img');
         //var canvas = document.getElementById('myCanvas');
         var canvas = document.createElement('canvas');
-        
 
-        img.onload = function () {
-            canvas.id     = "can" + url;
+
+        img.onload = function() {
+            canvas.id = "can" + url;
             canvas.width = img.width;
             canvas.height = img.height;
             var ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, img.width,img.height );
+            ctx.drawImage(img, 0, 0, img.width, img.height);
             callback(ctx.getImageData(0, 0, img.width, img.height));
             canvas.style.border = "1px solid";
         };
@@ -61,8 +65,8 @@
     }
 
     function compare(firstImage, secondImage, callback) {
-        getImageData(firstImage, function (img1) {
-            getImageData(secondImage, function (img2) {
+        getImageData(firstImage, function(img1) {
+            getImageData(secondImage, function(img2) {
                 if (img1.width !== img2.width || img1.height != img2.height) {
                     callback(NaN);
                     return;
@@ -76,7 +80,9 @@
                     diff += Math.abs(img1.data[4 * i + 2] - img2.data[4 * i + 2]) / 255;
                 }
 
-                callback(100 * diff / (img1.width * img1.height * 3));
+                var x = 100 * diff / (img1.width * img1.height * 3);
+                callback(x);
+                output(x);
             });
         });
     };
@@ -84,4 +90,68 @@
     function showCapture() {
         window.open('/Home/ChangeReferencePhoto/', "wndPopUp", 'width=720,height=400,left=100,top=100,resizable=no');
     }
+
+    function output(res) {
+        if (res.toFixed(2) > 50) {
+            $('#lstOutputs')
+                .append($("<option></option>")
+                    .attr("value", 1)
+                    .text(true + "    " + res.toFixed(2) + "% difference"));
+        } else {
+            $('#lstOutputs')
+                .append($("<option></option>")
+                    .attr("value", 1)
+                    .text(false + "    " + res.toFixed(2) + "% difference"));
+        }
+    }
+
+    var currentImages = [];
+
+    function cutImages() {
+        if (@Model != null)
+            var allpoints = JSON.parse(@Model.JSONstring);
+
+        for (var i = 0; i < allpoints;  i++) {
+            for(var j = 0; j < allpoints[i].length; j++){
+                var a = { x: allpoints[i][j][0], y: allpoints[i][j][1] };
+                var b = { x: allpoints[i][j][0], y: allpoints[i][j][1] };
+                var c = { x: allpoints[i][j][0], y: allpoints[i][j][1] };
+                var d = { x: allpoints[i][j][0], y: allpoints[i][j][1] };
+
+                Cut(a,b,c,d);
+            }
+        }
+    }
+
+    function Cut(a, b, c, d) {
+
+        var points = [];
+        currentImages = [];
+        points.push(a);
+        points.push(b);
+        points.push(c);
+        points.push(d);
+
+        var con = document.getElementById("myCanvas2");
+        con.height = img.height;
+        con.width = img.width;
+        var ctx = con.getContext("2d");
+
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+
+        for (var i = 1; i < points.length; i++) {
+            var p = points[i]; //Possble Remove
+            ctx.lineTo(points[i].x, points[i].y);
+        }
+
+        ctx.closePath();
+
+        ctx.clip();
+
+        ctx.drawImage(img, 0, 0);
+
+        currentImages.push(con);
+    }
+
 </script>

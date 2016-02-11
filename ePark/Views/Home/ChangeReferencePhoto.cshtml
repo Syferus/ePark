@@ -5,9 +5,12 @@
 
 @section scripts
 {
-    <script src="@Url.Content("~/Scripts/jquery.webcam.js")">
-    
-    </script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script src="@Url.Content("~/Scripts/jquery.webcam.js")"></script>
+
     <script>
         $("#Camera").webcam({
             width: 320,
@@ -23,9 +26,270 @@
             debug: function() {},
             onLoad: function() {}
         });
+
+
+        var Img;
+        var allPoints = [];
+        window.onload = function() {
+            Img = document.createElement("img");
+            Img.src = "/WebcamImages/reference.jpg";
+            $("#canvas").css("background-image", "url(/WebcamImages/reference.jpg)");
+        };
+
+
+        function Node(x, y) {
+            var circle = new createjs.Shape();
+            circle.x = x;
+            circle.y = y;
+            circle.cursor = "move";
+            circle._fill = "#7fff00";
+
+            var dragging = false;
+
+            function drawSprite() {
+                circle.graphics.clear().beginFill(circle._fill).drawCircle(0, 0, 2);
+            }
+
+            drawSprite();
+
+            circle.on("pressup", function(evt) {
+                if (dragging) {
+                    circle._fill = "#7fff00";
+                    drawSprite();
+                    circle.stage.update();
+                }
+                dragging = false;
+            });
+
+            circle.on("mousedown", function(evt) {
+                circle._fill = "#f00";
+                circle._dragOffset = circle.globalToLocal(evt.stageX, evt.stageY);
+                drawSprite();
+                dragging = true;
+            });
+
+            circle.on("pressmove", function(evt) {
+                evt.currentTarget.x = evt.stageX - circle._dragOffset.x;
+                evt.currentTarget.y = evt.stageY - evt.currentTarget._dragOffset.y;
+                circle.stage.update();
+            });
+
+            return circle;
+        }
+
+        var nodes;
+
+        $(document).ready(function() {
+            var stage = new createjs.Stage("canvas");
+            var counter1 = 0;
+
+            var connectors = new createjs.Shape();
+            nodes = new createjs.Container();
+            stage.addChild(connectors, nodes);
+
+
+            stage.on("stagemousedown", function(evt) {
+                var underPoint = stage.getObjectUnderPoint(evt.stageX, evt.stageY);
+                if (!underPoint && counter1 < 4) {
+                    nodes.addChild(Node(evt.stageX, evt.stageY));
+                    stage.update();
+                    counter1++
+                    return true;
+                } else {
+                    //init();
+                    return false;
+                }
+            });
+
+            stage.on("tickstart", function(evt) {
+                var g = connectors.graphics;
+                g.clear();
+                g.setStrokeStyle(1);
+                g.beginStroke("#7fff00");
+                $.each(nodes.children, function(i, node) {
+                    if (i == 0) {
+                        g.moveTo(node.x, node.y);
+                    } else {
+                        g.lineTo(node.x, node.y)
+                    }
+                });
+                g.endStroke();
+            });
+            stage.update();
+
+        });
+
+        var canvas;
+        var points = [];
+        var counter = 0;
+
+        function init() {
+            canvas = document.getElementById("canvas");
+            $("#canvas").css("background-image", "url(/WebcamImages/reference.jpg)");
+
+            var ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            points[0] = new Array(nodes.children[0].x, nodes.children[0].y);
+            points[1] = new Array(nodes.children[1].x, nodes.children[1].y);
+            points[2] = new Array(nodes.children[2].x, nodes.children[2].y);
+            points[3] = new Array(nodes.children[3].x, nodes.children[3].y);
+
+            drawLines();
+
+        }
+
+        function drawLines() {
+            var ctx = canvas.getContext("2d");
+
+            ctx.beginPath();
+            ctx.moveTo(points[0][0], points[0][1]);
+            ctx.lineTo(points[1][0], points[1][1]);
+            ctx.lineTo(points[2][0], points[2][1]);
+            ctx.lineTo(points[3][0], points[3][1]);
+            ctx.lineTo(points[0][0], points[0][1]);
+            ctx.stroke();
+            other();
+        }
+
+        function other() {
+            var distA = lineDistance(points[0][0], points[0][1], points[1][0], points[1][1]);
+            var distB = lineDistance(points[1][0], points[1][1], points[2][0], points[2][1]);
+            var distC = lineDistance(points[2][0], points[2][1], points[3][0], points[3][1]);
+            var distD = lineDistance(points[3][0], points[3][1], points[0][0], points[0][1]);
+
+            var context = canvas.getContext("2d");
+
+            context.moveTo(points[0][0], points[0][1])
+
+            var times = 15;
+
+            var AngleA = Math.atan2(points[1][1] - points[0][1], points[1][0] - points[0][0]);
+            var Per_Frame_DistanceA = distA / times;
+            var SinA = Math.sin(AngleA) * Per_Frame_DistanceA; //add to y
+            var CosA = Math.cos(AngleA) * Per_Frame_DistanceA; //add to x
+
+
+            var AngleB = Math.atan2(points[2][1] - points[1][1], points[2][0] - points[1][0]);
+            var Per_Frame_DistanceB = distB / times;
+            var SinB = Math.sin(AngleB) * Per_Frame_DistanceB; //add to y
+            var CosB = Math.cos(AngleB) * Per_Frame_DistanceB; //add to x
+
+
+            var AngleC = Math.atan2(points[3][1] - points[2][1], points[3][0] - points[2][0]);
+            var Per_Frame_DistanceC = distC / times;
+            var SinC = Math.sin(AngleC) * Per_Frame_DistanceC; //add to y
+            var CosC = Math.cos(AngleC) * Per_Frame_DistanceC; //add to x
+
+
+            var AngleD = Math.atan2(points[3][1] - points[0][1], points[3][0] - points[0][0]) //(points[0][1] - points[3][1], points[0][0] - points[3][0]);
+            var Per_Frame_DistanceD = distD / times;
+            var SinD = Math.sin(AngleD) * Per_Frame_DistanceD; //add to y
+            var CosD = Math.cos(AngleD) * Per_Frame_DistanceD; //add to x
+
+            var AX = points[0][0];
+            var AX1 = points[0][0];
+            var BX = points[1][0];
+            var CX = points[2][0];
+            var DX = points[3][0];
+
+            var AY = points[0][1];
+            var AY1 = points[0][1];
+            var BY = points[1][1];
+            var CY = points[2][1];
+            var DY = points[3][1];
+
+
+            for (var i = 0; i < times; i++) {
+                context.moveTo(AX += CosA, AY += SinA);
+                context.lineTo(DX -= CosC, DY -= SinC);
+            }
+            context.stroke();
+            for (var j = 0; j < times; j++) {
+                context.moveTo(BX += CosB, BY += SinB);
+                context.lineTo(AX1 += CosD, AY1 += SinD);
+            }
+            context.stroke();
+        }
+
+        function lineDistance(x1, y1, x2, y2) {
+            var xs = 0;
+            var ys = 0;
+
+            xs = x2 - x1;
+            xs = xs * xs;
+
+            ys = y2 - y1;
+            ys = ys * ys;
+
+            return Math.sqrt(xs + ys);
+
+        }
+
+        function Cut() {
+            var a = { x: points[0][0], y: points[0][1] };
+            var b = { x: points[1][0], y: points[1][1] };
+            var c = { x: points[2][0], y: points[2][1] };
+            var d = { x: points[3][0], y: points[3][1] };
+            points = [];
+
+            points.push(a);
+            points.push(b);
+            points.push(c);
+            points.push(d);
+
+            var img = Img;
+            var c = document.getElementById("myCanvas2");
+            c.height = img.height;
+            c.width = img.width;
+            var ctx = c.getContext("2d");
+
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+
+            for (var i = 1; i < points.length; i++) {
+                var p = points[i]; //Possble Remove
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+
+            ctx.closePath();
+
+            ctx.clip();
+
+            ctx.drawImage(img, 0, 0);
+
+            allPoints.push(points);
+
+        }
+
+        function success() {
+            var jsonPoints = JSON.stringify(allPoints);
+
+            $.ajax({
+                type: 'POST',
+                datatype: 'text',
+                url: "/Home/Index/",
+                data: { jsonPoints: jsonPoints },
+                success: function(data) {},
+                error: function(err) { alert(err); }
+            });
+        }
+
     </script>
+
 }
 <div id="Camera"></div>
-<input type="button" value="Take reference photo" onclick="webcam.capture();"/>
-<input type="button" value="close" onclick="window.close();"/>
+<input type="button" value="Take reference photo" class="btn btn-primary" onclick="webcam.capture();"/>
+@Html.ActionLink("Cancel", "Index", null, new {@class= "btn btn-warning"})
+
+<br/>
+<canvas id="canvas" style="border: groove; width: 320px; height:240px"></canvas>
+    <br/>
+<button onclick="init()" class="btn btn-primary">Cut</button>
+<button onclick="Cut()" class="btn btn-primary">Save</button>
+<input type="button" value="Finish" class="btn btn-success" onclick="success()" />
+
+<div>
+    <canvas id="myCanvas2"></canvas>
+</div>
 
