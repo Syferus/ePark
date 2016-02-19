@@ -29,6 +29,7 @@
                         var County;
                         var CarParkName;
                         var Resolution;
+                        var Frequency;
 
                         function initMap() {
                             map = new google.maps.Map(document.getElementById('map'), {
@@ -114,17 +115,20 @@
                         }
 
                         function TestRes() {
-                            //Take Picture
+                            //Take Reference Picture
                             $('#imgdiv').slideDown(1000);
                         }
 
                         function SaveResolution() {
                             Resolution = $('#SelResolution').val();
+                            $('#resolution').slideUp(1000, function () {
+                                $('#frequency').slideDown(1000);
+                            });                                                     
+                        }
 
-                            console.log(Resolution)
-                            $('#resolution').slideUp(1000);
-                            $('#frequency').slideDown(1000);
-                            
+                        function SaveFrequency() {
+                            Frequency = $('#SelFrequency').val();
+                            $('#frequency').slideUp(1000);
                         }
 
                     </script>
@@ -166,12 +170,13 @@
                 
                 <div id="frequency" hidden="hidden">
                     <h3>Frequency</h3>
-                    <select name="SelFrequency" class="form-control">
+                    <select id="SelFrequency" class="form-control">
                         <option value="10">10 Seconds</option>
                         <option value="30">30 Seconds</option>
                         <option value="60">1 Minute</option>
                         <option value="120">2 Minutes</option>
                         <option value="300">5 Minutes</option>
+                        <option value="600">10 Minutes</option>
                     </select>
                     <br />
                     <input type="button" value="Save" class="btn btn-success" onclick="SaveFrequency()" />
