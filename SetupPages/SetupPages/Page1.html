@@ -17,6 +17,7 @@
             </div>
             <div class="col-md-9">
                 <h1>ePark Setup</h1>
+
                 <div id="location">
                     <h3>Select Car Park Location</h3>
                     <div id="map" style="height: 400px; width: 80%;"></div>
@@ -25,6 +26,9 @@
                         var map;
                         var marker;
                         var geocoder;
+                        var County;
+                        var CarParkName;
+                        var Resolution;
 
                         function initMap() {
                             map = new google.maps.Map(document.getElementById('map'), {
@@ -59,7 +63,6 @@
                             });
                         }
 
-
                         function AddMarker(latlng) {
                             marker = new google.maps.Marker({
                                 position: latlng,
@@ -67,13 +70,7 @@
                                 draggable: true,
                                 animation: google.maps.Animation.DROP
                             });
-                        }
-
-                        function SaveLocation() {
-                            $('#location').slideUp(1000, function () {
-                                $('#resolution').slideDown(1000);
-                            });
-                        }
+                        }                       
 
                         function GetAddress() {
                             geocodeLatLng();
@@ -92,8 +89,8 @@
                                         var address = results[0].formatted_address;
 
                                         if (results[0].address_components[3].short_name == "IE" || results[0].address_components[4].short_name == "IE") {
-
                                             document.getElementById("address").value = results[1].formatted_address;
+                                            County = results[0].address_components[2].long_name;
                                         }
                                         else {
                                             alert("Not Available In This Location")
@@ -107,6 +104,27 @@
                                     alert('Geocoder failed due to: ' + status);
                                 }
                             });
+                        }
+
+                        function SaveLocation() {
+                            CarParkName = $('#txtName').val();
+                            $('#location').slideUp(1000, function () {
+                                $('#resolution').slideDown(1000);
+                            });
+                        }
+
+                        function TestRes() {
+                            //Take Picture
+                            $('#imgdiv').slideDown(1000);
+                        }
+
+                        function SaveResolution() {
+                            Resolution = $('#SelResolution').val();
+
+                            console.log(Resolution)
+                            $('#resolution').slideUp(1000);
+                            $('#frequency').slideDown(1000);
+                            
                         }
 
                     </script>
@@ -128,24 +146,36 @@
 
                 <div id="resolution" hidden="hidden">
                     <h3>Resolution</h3>
-                    <select name="SelResolution" class="form-control">
+                    <select id="SelResolution" class="form-control">
                         <option value="1920x1080">1920 x 1080 (1080p)</option>
                         <option value="1280x720">1280 x 720 (720p)</option>
                         <option value="858x480">858 x 480 (480p)</option>
                         <option value="480x360">480 x 360 (360p)</option>
                     </select>
                     <br />
-                    <img src="Content/empty_carpark.jpg" width="80%" />
+                    <input type="button" value="Test Resolution" id="testRes" class="btn btn-success" onclick="TestRes()" />
+                    <br />
+                    <br />
+                    <div id="imgdiv" hidden="hidden">
+                        <img src="Content/empty_carpark.jpg" id="carparkimg" width="80%" />
+                        <br />
+                        <br />
+                        <input type="button" value="Save" class="btn btn-success" onclick="SaveResolution()" />
+                    </div>
                 </div>
-
-                <h3>Frequency</h3>
-                <select name="Frequency" class="form-control">
-                    <option value="10">10 Seconds</option>
-                    <option value="30">30 Seconds</option>
-                    <option value="60">1 Minute</option>
-                    <option value="120">2 Minutes</option>
-                    <option value="300">5 Minutes</option>
-                </select>
+                
+                <div id="frequency" hidden="hidden">
+                    <h3>Frequency</h3>
+                    <select name="SelFrequency" class="form-control">
+                        <option value="10">10 Seconds</option>
+                        <option value="30">30 Seconds</option>
+                        <option value="60">1 Minute</option>
+                        <option value="120">2 Minutes</option>
+                        <option value="300">5 Minutes</option>
+                    </select>
+                    <br />
+                    <input type="button" value="Save" class="btn btn-success" onclick="SaveFrequency()" />
+                </div>
             </div>
         </div>
     </div>
