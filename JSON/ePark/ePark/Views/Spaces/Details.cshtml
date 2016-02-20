@@ -1,0 +1,82 @@
+﻿@model ePark.Models.Space
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Space</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.x1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.x1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.x2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.x2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.x3)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.x3)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.x4)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.x4)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.y1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.y1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.y2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.y2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.y3)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.y3)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.y4)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.y4)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SpaceID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

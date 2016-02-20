@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ePark.Models.Space>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.x1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.x2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.x3)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.x4)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.y1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.y2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.y3)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.y4)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.x1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.x2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.x3)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.x4)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.y1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.y2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.y3)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.y4)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.SpaceID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.SpaceID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.SpaceID })
+        </td>
+    </tr>
+}
+
+</table>
