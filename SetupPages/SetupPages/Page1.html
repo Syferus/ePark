@@ -70,7 +70,7 @@
                                 draggable: true,
                                 animation: google.maps.Animation.DROP
                             });
-                        }                       
+                        }
 
                         function GetAddress() {
                             geocodeLatLng();
@@ -96,7 +96,6 @@
                                             alert("Not Available In This Location")
                                         }
 
-
                                     } else {
                                         alert('No results found');
                                     }
@@ -108,16 +107,29 @@
 
                         function SaveLocation() {
                             CarParkName = $('#txtName').val();
-                            if (CarParkName != null && CarParkName != "") {                                
+                            if (CarParkName != null && CarParkName != "") {
                                 $('#location').slideUp(1000, function () {
                                     $('#resolution').slideDown(1000);
                                 });
                             }
                             else {
                                 document.getElementById("pNoName").innerText = "*Name Required";
-                                //$('#pNoName') = "Name Required";
                             }
                         }
+                        /*
+                            <form method="post">
+                                <input type="submit" name="formSubmit" value="Submit"/>
+                            </form>
+
+                            <?php
+                             if($_POST['formSubmit'] == "Submit")
+                                {
+                                        $r = $_POST['r'];
+                                        $varFrequency = $_POST['Frequency'];
+                                        exec("fswebcam -r $r  --no-banner reference.jpg");
+                                }
+                            ?>
+                        */
 
                         function TestRes() {
                             //Take Reference Picture
@@ -128,14 +140,13 @@
                             Resolution = $('#SelResolution').val();
                             $('#resolution').slideUp(1000, function () {
                                 $('#frequency').slideDown(1000);
-                            });                                                     
+                            });
                         }
 
                         function SaveFrequency() {
                             Frequency = $('#SelFrequency').val();
                             $('#frequency').slideUp(1000);
                         }
-
                     </script>
                     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmSz0pkt2C8aCAY6CQAu1PY6PrSHWEOy8&&region=IE&callback=initMap" async defer></script>
                     <br />
@@ -173,7 +184,7 @@
                         <input type="button" value="Save" class="btn btn-success" onclick="SaveResolution()" />
                     </div>
                 </div>
-                
+
                 <div id="frequency" hidden="hidden">
                     <h3>Frequency</h3>
                     <select id="SelFrequency" class="form-control">
