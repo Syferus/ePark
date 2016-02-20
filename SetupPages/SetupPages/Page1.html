@@ -5,11 +5,10 @@
     <meta charset="utf-8" />
     <link href="Content/bootstrap.css" rel="stylesheet" />
     <script src="Scripts/bootstrap.js"></script>
-    <script src="Scripts/jquery-1.10.2.js"></script>
+    <script src="Scripts/jquery-2.2.0.js"></script>
     <link href="Content/Site.css" rel="stylesheet" />
 </head>
 <body>
-
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-3" id="div1">
@@ -109,9 +108,15 @@
 
                         function SaveLocation() {
                             CarParkName = $('#txtName').val();
-                            $('#location').slideUp(1000, function () {
-                                $('#resolution').slideDown(1000);
-                            });
+                            if (CarParkName != null && CarParkName != "") {                                
+                                $('#location').slideUp(1000, function () {
+                                    $('#resolution').slideDown(1000);
+                                });
+                            }
+                            else {
+                                document.getElementById("pNoName").innerText = "*Name Required";
+                                //$('#pNoName') = "Name Required";
+                            }
                         }
 
                         function TestRes() {
@@ -141,6 +146,7 @@
                         <br />
                         Car Park Name:
                         <input type="text" id="txtName" class="form-control" required="required" />
+                        <p id="pNoName" class="text-danger" style="font-size:15px;"></p>
                         Address:
                         <input id="address" type="text" class="form-control" disabled="disabled" />
                         <br />
