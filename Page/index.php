@@ -29,7 +29,7 @@
                         var CarParkName;
                         var Resolution;
                         var Frequency;
-
+						var num = 0;
                         function initMap() {
                             map = new google.maps.Map(document.getElementById('map'), {
                                 center: { lat: 53.3441, lng: -6.2675 },
@@ -116,71 +116,40 @@
                                 document.getElementById("pNoName").innerText = "*Name Required";
                             }
                         }
-                        /*
-                            <form method="post">
-                                <input type="submit" name="formSubmit" value="Submit"/>
-                            </form>
-
-                            <?php
-                             if($_POST['formSubmit'] == "Submit")
-                                {
-                                        $r = $_POST['r'];
-                                        $varFrequency = $_POST['Frequency'];
-                                        exec("fswebcam -r $r  --no-banner reference.jpg");
-                                }
-                            ?>
-                        */
-						
-						/*$(document).ready(function(){
-							var res = $('#SelResolution').val();
-							
-							$("#testRes").click(function() {
-										$.ajax({
-									type: "POST",
-									url: "TakePic.php", //Your required php page
-									data: "r="+ res, //pass your required data here
-									success: function(response){
-										$('#output').html(response);
-									}
-								});
-							//return false;
-							});
-						});*/
 						
                         function TestRes() {
-							
+							num++;
 							var res = $('#SelResolution').val();
-							
-							$.ajax({
+							console.log(res);
+							$('#imgdiv').slideUp(1000, function(){
+								$.ajax({
 									type: "POST",
 									url: "TakePic.php", //Your required php page
-									data: "r="+ res, //pass your required data here
+									//data: "r="+ res, 
+									data: {r: res, n: num},//pass your required data here
 									success: function(response){
 										$('#output').html(response);
 									}
 								});
-								
-                            //Take Reference Picture
-							//exec("fswebcam -r 1920x1080  --no-banner reference.jpg");
-							 //$('#imgdiv').slideUp(1000, function(){
-								//	Resolution = $('#SelResolution').val();
-							
-						//	var xmlhttp = new XMLHttpRequest();
-							
-								//xmlhttp.onreadystatechange = function() {
-								//if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-									//document.getElementById("carparkimg").src = xmlhttp.responseText;
-								//}
-								
-							//	xmlhttp.open("POST", "TakePic.php", true);
-							//	xmlhttp.send();
-								//alert("Taking Picture");
-								//$('#carparkimg').src = "Content/carpark.jpg";
-								//$('#imgdiv').slideDown(1000);
-							 //});
-								$('#imgdiv').slideDown(1000);			
+							});	
+							setTimeout(ReplacePic, 4000);
                         }
-
+						
+						function ReplacePic()
+						{
+							var d = document.getElementById("imgdiv");
+							
+							var i1 = document.getElementById("CarParkImg");
+							
+							var i = document.createElement("img");
+							i.id = "CarParkImg";
+							i.src = "Content/carpark"+num+".jpg"
+							d.replaceChild(i, i1);
+							
+							$('#imgdiv').slideDown(4000);	
+							
+						}
+						
                         function SaveResolution() {
                             Resolution = $('#SelResolution').val();
                             $('#resolution').slideUp(1000, function () {
@@ -224,7 +193,7 @@
                     <br />
                     <br />
                     <div id="imgdiv" hidden="hidden">
-                        <img id="carparkimg" src="Content/empty_carpark.jpg" width="80%" />
+                        <img id="CarParkImg" width="80%" />
                         <br />
                         <br />
                         <input type="button" value="Save" class="btn btn-success" onclick="SaveResolution()" />
