@@ -12,7 +12,7 @@ namespace ePark.Controllers
     {
         private eParkContext db = new eParkContext();
 
-        private List<Space> space = new List<Space>(); 
+        //private List<Space> space = new List<Space>(); 
 
         public ActionResult Index()
         {
@@ -22,9 +22,12 @@ namespace ePark.Controllers
         [HttpPost]
         public JsonResult InsertSpace(string spaceJson)
         {
+            Space space = new Space();
             var js = new JavaScriptSerializer();
-            space.Add(js.Deserialize<Space>(spaceJson));
+            space = (js.Deserialize<Space>(spaceJson));
 
+            db.Spaces.Add(space);
+            db.SaveChanges();
             //TODO: user now contains the details, you can do required operations  
             return Json("User Details are updated");
         }
