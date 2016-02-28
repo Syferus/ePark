@@ -98,7 +98,7 @@
 										if(z == "IE")
 										{
 											document.getElementById("address").value = results[1].formatted_address;
-											County = y;
+											County = y.toString();
 											$('#saveLocation').attr("disabled", false);
 										}
                                         else {
@@ -132,7 +132,6 @@
                         function TestRes() {
 							num++;
 							var res = $('#SelResolution').val();
-							console.log(res);
 							$('#imgdiv').slideUp(1000, function(){
 								$.ajax({
 									type: "POST",
@@ -171,8 +170,22 @@
 
                         function SaveFrequency() {
                             Frequency = $('#SelFrequency').val();
-                            $('#frequency').slideUp(1000);
+                            $('#frequency').slideUp(1000, function () {
+                                $('#Finish').slideDown(1000);
+                            });
                         }
+						
+						function SaveChanges()
+						{
+							$.ajax({
+									type: "POST",
+									url: "SaveChanges.php",
+									data: {CarParkName: CarParkName, CarParkAddress: County, Resolution: Resolution, Frequency: Frequency, ImageName: "123" },
+									success: function(response){
+										$('#output1').html(response);
+									}
+								});
+						}
                     </script>
                     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmSz0pkt2C8aCAY6CQAu1PY6PrSHWEOy8&&region=IE&callback=initMap" async defer></script>
                     <br />
@@ -225,6 +238,12 @@
                     <br />
                     <input type="button" value="Save" class="btn btn-success" onclick="SaveFrequency()" />
                 </div>
+				
+				<div id="Finish" hidden="hidden">
+				<h3>Finish</h3>
+				<input type="button" value="Finish" class="btn btn-success" onclick="SaveChanges()" />
+				<div id="output1"></div>
+				</div>
             </div>
         </div>
     </div>
