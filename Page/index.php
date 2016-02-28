@@ -9,6 +9,7 @@
     <link href="Content/Site.css" rel="stylesheet" />
 </head>
 <body>
+
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-3" id="div1">
@@ -87,20 +88,31 @@
                                 if (status === google.maps.GeocoderStatus.OK) {
                                     if (results[1]) {
                                         var address = results[0].formatted_address;
-
-                                        if (results[0].address_components[3].short_name == "IE" || results[0].address_components[4].short_name == "IE") {
-                                            document.getElementById("address").value = results[1].formatted_address;
-                                            County = results[0].address_components[2].long_name;
-                                        }
+										
+										var x = results[0].address_components.length
+										
+										var y = results[0].address_components[x-2].long_name;
+										
+										var z = results[0].address_components[x-1].short_name;
+										console.log(y)
+										if(z == "IE")
+										{
+											document.getElementById("address").value = results[1].formatted_address;
+											County = y;
+											$('#saveLocation').attr("disabled", false);
+										}
                                         else {
-                                            alert("Not Available In This Location")
+                                            alert("Not Available In This Location");
+											$('#saveLocation').attr("disabled", true);
                                         }
 
                                     } else {
                                         alert('No results found');
+										$('#saveLocation').attr("disabled", true);
                                     }
                                 } else {
                                     alert('Geocoder failed due to: ' + status);
+									$('#saveLocation').attr("disabled", true);
                                 }
                             });
                         }
@@ -173,9 +185,9 @@
                         <input type="text" id="txtName" class="form-control" required="required" />
                         <p id="pNoName" class="text-danger" style="font-size:15px;"></p>
                         Address:
-                        <input id="address" type="text" class="form-control" disabled="disabled" />
+                        <input id="address" type="text" class="form-control" disabled="disabled" required="required" />
                         <br />
-                        <input type="button" id="saveLocation" class="btn btn-success" value="Save" onclick="SaveLocation()" />
+                        <input type="button" id="saveLocation" class="btn btn-success" value="Save" disabled="true" onclick="SaveLocation()" />
                     </div>
                 </div>
 
