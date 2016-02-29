@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="eparkdbModelStoreContainer" CdmEntityContainer="eparkdbEntities">
+    <EntitySetMapping Name="carparks">
+      <EntityTypeMapping TypeName="eparkdbModel.carpark">
+        <MappingFragment StoreEntitySet="carparks">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="GPS" ColumnName="GPS" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="locations">
+      <EntityTypeMapping TypeName="eparkdbModel.location">
+        <MappingFragment StoreEntitySet="locations">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="County" ColumnName="County" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="spaces">
+      <EntityTypeMapping TypeName="eparkdbModel.space">
+        <MappingFragment StoreEntitySet="spaces">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="CarPark" ColumnName="CarPark" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="x1" ColumnName="x1" />
+          <ScalarProperty Name="y1" ColumnName="y1" />
+          <ScalarProperty Name="x2" ColumnName="x2" />
+          <ScalarProperty Name="y2" ColumnName="y2" />
+          <ScalarProperty Name="x3" ColumnName="x3" />
+          <ScalarProperty Name="y3" ColumnName="y3" />
+          <ScalarProperty Name="x4" ColumnName="x4" />
+          <ScalarProperty Name="y4" ColumnName="y4" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

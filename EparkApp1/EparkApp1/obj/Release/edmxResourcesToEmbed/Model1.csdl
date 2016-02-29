@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="eparkdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="carpark">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GPS" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Location" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="spaces" Relationship="Self.CarPark1" FromRole="carparks" ToRole="spaces" />
+    <NavigationProperty Name="location1" Relationship="Self.Location1" FromRole="carparks" ToRole="locations" />
+  </EntityType>
+  <EntityType Name="location">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="County" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="carparks" Relationship="Self.Location1" FromRole="locations" ToRole="carparks" />
+  </EntityType>
+  <EntityType Name="space">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CarPark" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="x1" Type="Single" Nullable="false" />
+    <Property Name="y1" Type="Single" Nullable="false" />
+    <Property Name="x2" Type="Single" Nullable="false" />
+    <Property Name="y2" Type="Single" Nullable="false" />
+    <Property Name="x3" Type="Single" Nullable="false" />
+    <Property Name="y3" Type="Single" Nullable="false" />
+    <Property Name="x4" Type="Single" Nullable="false" />
+    <Property Name="y4" Type="Single" Nullable="false" />
+    <NavigationProperty Name="carpark1" Relationship="Self.CarPark1" FromRole="spaces" ToRole="carparks" />
+  </EntityType>
+  <Association Name="CarPark1">
+    <End Role="carparks" Type="Self.carpark" Multiplicity="1" />
+    <End Role="spaces" Type="Self.space" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="carparks">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="spaces">
+        <PropertyRef Name="CarPark" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Location1">
+    <End Role="locations" Type="Self.location" Multiplicity="1" />
+    <End Role="carparks" Type="Self.carpark" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="locations">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="carparks">
+        <PropertyRef Name="Location" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="eparkdbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="carparks" EntityType="Self.carpark" />
+    <EntitySet Name="locations" EntityType="Self.location" />
+    <EntitySet Name="spaces" EntityType="Self.space" />
+    <AssociationSet Name="CarPark" Association="Self.CarPark1">
+      <End Role="carparks" EntitySet="carparks" />
+      <End Role="spaces" EntitySet="spaces" />
+    </AssociationSet>
+    <AssociationSet Name="Location" Association="Self.Location1">
+      <End Role="locations" EntitySet="locations" />
+      <End Role="carparks" EntitySet="carparks" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
