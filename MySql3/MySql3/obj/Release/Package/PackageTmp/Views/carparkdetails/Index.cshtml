@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MySql3.carparkdetail>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CarParkName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CarParkAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Resolution)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Frequency)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CarParkName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CarParkAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Resolution)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Frequency)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ImageName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.CarParkID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.CarParkID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.CarParkID })
+        </td>
+    </tr>
+}
+
+</table>
