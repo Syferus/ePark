@@ -32,11 +32,19 @@ namespace ePark.Controllers
             return Json("User Details are updated");
         }
 
-        public ActionResult Contact()
+        public ActionResult About()
         {
-            ViewBag.Message = "Your contact page.";
+           return View();
+        }
 
-            return View();
+
+        //[HttpGet]
+        public ActionResult GetSpace()
+        {
+            List<Space> sp = db.Spaces.ToList(); 
+    
+            //JavaScriptSerializer js = new JavaScriptSerializer();
+            return Json(new { space = sp}, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -30,5 +30,6 @@ namespace ePark.Models
         public double y2 { get; set; }
         public double y3 { get; set; }
         public double y4 { get; set; }
+        public bool full { get; set; }
     }
 }

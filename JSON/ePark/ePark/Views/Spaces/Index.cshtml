@@ -12,6 +12,12 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.SpaceID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CarPark)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.x1)
         </th>
         <th>
@@ -35,11 +41,20 @@
         <th>
             @Html.DisplayNameFor(model => model.y4)
         </th>
+        <td>
+            @Html.DisplayNameFor(model => model.full)
+        </td>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SpaceID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CarPark)
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.x1)
         </td>
@@ -65,9 +80,12 @@
             @Html.DisplayFor(modelItem => item.y4)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.SpaceID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.SpaceID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.SpaceID })
+            @Html.DisplayFor(modelItem => item.full)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {id = item.SpaceID}) |
+            @Html.ActionLink("Details", "Details", new {id = item.SpaceID}) |
+            @Html.ActionLink("Delete", "Delete", new {id = item.SpaceID})
         </td>
     </tr>
 }
