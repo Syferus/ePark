@@ -271,7 +271,7 @@
 
         function success() {
             var jsonPoints = JSON.stringify(model);
-            alert(jsonPoints);
+            console.log(jsonPoints);
             var returnValue = {"spaceJSON": jsonPoints}
             $.ajax({
                 type: 'POST',

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -28,10 +29,24 @@ namespace ePark.Controllers
 
             db.Spaces.Add(space);
             db.SaveChanges();
-            //TODO: user now contains the details, you can do required operations  
-            return Json("User Details are updated");
+            
+            return Json("Space was inserted");
         }
 
+        [HttpPost]
+        public JsonResult UpdateFull(string spaceJson)
+        {
+            var js = new JavaScriptSerializer();
+
+            List<Space> spaces = js.Deserialize<List<Space>>(spaceJson);
+
+            foreach (Space sp in spaces)
+            {
+                db.Entry(sp).State = EntityState.Modified;
+            }
+            db.SaveChanges();
+            return Json("User Details are updated");
+        }
         public ActionResult About()
         {
            return View();

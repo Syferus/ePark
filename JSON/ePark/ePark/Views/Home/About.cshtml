@@ -1,16 +1,21 @@
 ﻿<h1>Image cutting demo</h1>
 
 <img id="carPark" src="/WebImages/reference.jpg" hidden>
+<img id="carPark2" src="/WebImages/comparison.jpg" hidden>
 
 <h1>Canvas:</h1>
 <div class="styles">
     <input class="Button" type="Button" value="Cut Image" onClick="Cut()">
 </div>
 <div class="styles">
-    <canvas id="myCanvas" style="border:1px solid #d3d3d3;"></canvas>
+    <canvas id="myCanvas" style="border: 1px solid #d3d3d3;"></canvas>
+    <canvas id="myCanvas2" style="border:1px solid #d3d3d3;"></canvas>
 </div>
 <div class="styles">
-    <canvas id="myCanvas2"></canvas>
+    <canvas id="myCanvas3"></canvas>
+    <canvas id="myCanvas4"></canvas>
+    <img id="im1" />
+    <img id="im2" />
 </div>
 
 @section scripts
@@ -21,83 +26,140 @@
     <script>
 
         var sp = {};
-
-        $(document).ready(function () {
-            $('h1').click(function () {
-                GetSpacesUsingAjax();
-            });
+        $(document).ready(function() {
+            GetSpacesUsingAjax();
         });
 
         function GetSpacesUsingAjax() {
-            //$.ajax({
-            //    type: 'GET',
-            //    url: 'Home/GetSpace/',
-            //    success: function(sp) {
-            //        $('#id').text(sp.space.SpaceID);
-            //        $('#x1').text(sp.space.x1);
-            //        $('#y1').text(sp.space.y1);
-
-            //    },
-            //    error: function(sp) {
-            //        alert('error');
-            //    }
-            //});
-            $.get('/Home/GetSpace/', function (data) {
-                sp.id = (data.space.SpaceID);
-                sp.x1 = (data.space.x1);
-                sp.y1 = (data.space.y1);
-                sp.x2 = (data.space.x2);
-                sp.y2 = (data.space.y2);
-                sp.x3 = (data.space.x3);
-                sp.y3 = (data.space.y3);
-                sp.x4 = (data.space.x4);
-                sp.y4 = (data.space.y4);
+            $.get('/Home/GetSpace/', function(data) {
+                sp = (data.space);
             });
         }
 
         function Cut() {
+            $.each(sp, function(j) {
 
-            var a = { x: sp.x1, y: sp.y1 };
-            var b = { x: sp.x2, y: sp.y2 };
-            var c = { x: sp.x3, y: sp.y3 };
-            var d = { x: sp.x4, y: sp.y4 };
+                var a = { x: sp[j].x1, y: sp[j].y1 };
+                var b = { x: sp[j].x2, y: sp[j].y2 };
+                var c = { x: sp[j].x3, y: sp[j].y3 };
+                var d = { x: sp[j].x4, y: sp[j].y4 };
 
-            var points = [];
+                var points = [];
 
-            points.push(a);
-            points.push(b);
-            points.push(c);
-            points.push(d);
+                points.push(a);
+                points.push(b);
+                points.push(c);
+                points.push(d);
 
-            var img = document.getElementById("carPark");
-            var c = document.getElementById("myCanvas2");
-            c.height = img.height;
-            c.width = img.width;
-            var ctx = c.getContext("2d");
+                var img = document.getElementById("carPark");
+                var c = document.getElementById("myCanvas3");
+                c.height = img.height;
+                c.width = img.width;
+                var ctx = c.getContext("2d");
 
-            ctx.beginPath();
-            ctx.moveTo(points[0].x, points[0].y);
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
 
-            for (var i = 1; i < points.length; i++) {
-                var p = points[i]; //Possble Remove
-                ctx.lineTo(points[i].x, points[i].y);
-            }
+                for (var i = 1; i < points.length; i++) {
+                    var p = points[i]; //Possble Remove
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+                ctx.closePath();
 
-            ctx.closePath();
+                ctx.clip();
 
-            ctx.clip();
+                ctx.drawImage(img, 0, 0);
+                var img1 = ctx.getImageData(0, 0, img.width, img.height);
 
-            ctx.drawImage(img, 0, 0);
+                img = document.getElementById("carPark2");
+                var c1 = document.getElementById("myCanvas4");
+                c1.height = img.height;
+                c1.width = img.width;
+                ctx = c1.getContext("2d");
+
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+
+                for (var i = 1; i < points.length; i++) {
+                    var p = points[i]; //Possble Remove
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+                ctx.closePath();
+
+                ctx.clip();
+
+                ctx.drawImage(img, 0, 0);
+                var img2 = ctx.getImageData(0, 0, img.width, img.height);
+
+                compare(img1, img2, sp[j], function(result) { console.log(result) });
+            });
+
+            updateSpaces();
         }
 
-        window.onload = function () {
+        function updateSpaces() {
+            var jsonPoints = JSON.stringify(sp);
+            console.log(jsonPoints);
+            var returnValue = { "spaceJSON": jsonPoints }
+            $.ajax({
+                type: 'POST',
+                traditional: true,
+                async: false,
+                cache: false,
+                datatype: 'text',
+                url: "/Home/UpdateFull/",
+                context: document.body,
+                data: returnValue,
+                success: function (data) { },
+                error: function (err) { alert(err); }
+            });
+        }
+
+        window.onload = function() {
             var img = document.getElementById("carPark");
             var c = document.getElementById("myCanvas");
             c.height = img.height;
             c.width = img.width;
             var ctx = c.getContext("2d");
-            ctx.drawImage(img, 0, 0); // destination rectangle
+            ctx.drawImage(img, 0, 0);
+
+            img = document.getElementById("carPark2");
+            c = document.getElementById("myCanvas2");
+            c.height = img.height;
+            c.width = img.width;
+            ctx = c.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+
         };
+
+        function compare(img1, img2, sp, callback) {
+            if (img1.width !== img2.width || img1.height != img2.height) {
+                callback(NaN);
+                return;
+            }
+
+            var diff = 0;
+
+            for (var i = 0; i < img1.data.length / 4; i++) {
+                diff += Math.abs(img1.data[4 * i + 0] - img2.data[4 * i + 0]) / 255;
+                diff += Math.abs(img1.data[4 * i + 1] - img2.data[4 * i + 1]) / 255;
+                diff += Math.abs(img1.data[4 * i + 2] - img2.data[4 * i + 2]) / 255;
+            }
+
+            var x = 100 * diff / (img1.width * img1.height * 3);
+            callback(x);
+            output(x, sp);
+        };
+
+        function output(res, sp) {
+            if (res.toFixed(2) > 1) {
+                sp.full = true;
+                //alert(true);
+            } else {
+                sp.full = false;
+                //alert(false);
+            }
+        }
     </script>
 
 }
