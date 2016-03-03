@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="eparkmysqldbEntities-Web.config Connection String" description="eparkmysqldbEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Model.csdl|res://*/Model.ssdl|res://*/Model.msl;provider=MySql.Data.MySqlClient;provider connection string=&quot;server=eu-cdbr-azure-west-d.cloudapp.net;user id=bc9daf64ff34a2;password=e7404ad2;persistsecurityinfo=True;database=eparkmysqldb&quot;" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="E:\\3rd_Year_College\\3rd_Year\\Semester_6\\Project\\Other\ Code\\MySql3\\MySql3\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='eparkmysqldbEntities']/@connectionString" />
-  </parameter>
-</parameters>

@@ -7,6 +7,7 @@
     <script src="Content/bootstrap.min.js"></script>
     <script src="Content/jquery-2.2.0.min.js"></script>
     <link href="Content/Site.css" rel="stylesheet" />
+	<link rel="icon" href="Content/logo.png" sizes="16x16 32x32" type="image/png">
 </head>
 <body>
 
@@ -31,6 +32,9 @@
                         var Resolution;
                         var Frequency;
 						var num = 0;
+						// $( document ).ready(function() {
+							// initMap()
+						// });
                         function initMap() {
                             map = new google.maps.Map(document.getElementById('map'), {
                                 center: { lat: 53.3441, lng: -6.2675 },
@@ -146,8 +150,7 @@
 							setTimeout(ReplacePic, 4000);
                         }
 						
-						function ReplacePic()
-						{
+						function ReplacePic(){
 							var d = document.getElementById("imgdiv");
 							
 							var i1 = document.getElementById("CarParkImg");
@@ -175,8 +178,7 @@
                             });
                         }
 						
-						function SaveChanges()
-						{
+						function SaveChanges(){
 							$.ajax({
 									type: "POST",
 									url: "SaveChanges.php",
@@ -187,7 +189,8 @@
 								});
 						}
                     </script>
-                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmSz0pkt2C8aCAY6CQAu1PY6PrSHWEOy8&&region=IE&callback=initMap" async defer></script>
+					<!--<script src="https://maps.googleapis.com/maps/api/js"></script> -->
+                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDfhqrp6LNGphqO1xUNQJkLuFd0IPgmb8&&region=IE&callback=initMap" async defer></script>
                     <br />
 
                     <input type="button" id="getAddr" class="btn btn-success" value="Select Location" onclick="GetAddress()" />
