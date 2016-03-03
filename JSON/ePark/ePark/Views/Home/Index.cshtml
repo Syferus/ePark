@@ -71,18 +71,26 @@
         }
 
         var nodes;
+        var underPoint;
+        var counter1;
+        var connectors;
+        var stage;
 
-        $(document).ready(function() {
-            var stage = new createjs.Stage("canvas");
-            var counter1 = 0;
+        function resetDraw(parameters) {
+            stage = new createjs.Stage("canvas");
+            counter1 = 0;
 
-            var connectors = new createjs.Shape();
+            connectors = new createjs.Shape();
             nodes = new createjs.Container();
             stage.addChild(connectors, nodes);
+        }
 
+        $(document).ready(function() {
 
-            stage.on("stagemousedown", function(evt) {
-                var underPoint = stage.getObjectUnderPoint(evt.stageX, evt.stageY);
+            resetDraw();
+
+            stage.on("stagemousedown", function (evt) {
+                underPoint = stage.getObjectUnderPoint(evt.stageX, evt.stageY);
                 if (!underPoint && counter1 < 4) {
                     nodes.addChild(Node(evt.stageX, evt.stageY));
                     stage.update();
@@ -145,13 +153,15 @@
             other();
         }
 
+        var context;
+
         function other() {
             var distA = lineDistance(points[0][0], points[0][1], points[1][0], points[1][1])
             var distB = lineDistance(points[1][0], points[1][1], points[2][0], points[2][1])
             var distC = lineDistance(points[2][0], points[2][1], points[3][0], points[3][1])
             var distD = lineDistance(points[3][0], points[3][1], points[0][0], points[0][1])
 
-            var context = canvas.getContext("2d");
+            context = canvas.getContext("2d");
 
             context.moveTo(points[0][0], points[0][1])
 
@@ -242,7 +252,11 @@
             model.x4 = d.x4;
             model.y4 = d.y4;
             //alert(JSON.stringify(model));
-            success();
+
+            resetDraw();
+
+            allPoints.push(JSON.parse(JSON.stringify(model)));
+            //success();
 
             //allPoints.push(points);
 
@@ -270,21 +284,21 @@
         }
 
         function success() {
-            var jsonPoints = JSON.stringify(model);
+            var jsonPoints = JSON.stringify(allPoints);
             console.log(jsonPoints);
-            var returnValue = {"spaceJSON": jsonPoints}
-            $.ajax({
-                type: 'POST',
-                traditional: true,
-                async: false,
-                cache: false,
-                datatype: 'text',
-                url: "/Home/InsertSpace/",
-                context: document.body,
-                data: returnValue,
-                success: function(data) {},
-                error: function(err) { alert(err); }
-            });
+            var returnValue = { "spaceJSON": jsonPoints }
+            //$.ajax({
+            //    type: 'POST',
+            //    traditional: true,
+            //    async: false,
+            //    cache: false,
+            //    datatype: 'text',
+            //    url: "/Home/InsertSpace/",
+            //    context: document.body,
+            //    data: returnValue,
+            //    success: function(data) {},
+            //    error: function(err) { alert(err); }
+            //});
         }
     </script>
 }
