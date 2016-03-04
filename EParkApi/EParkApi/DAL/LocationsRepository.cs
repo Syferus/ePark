@@ -4,13 +4,26 @@ using System.Linq;
 
 namespace EParkApi.DAL
 {
-    public class LocationsRepository : IRepository<location>
+    public class LocationsRepository : IRepository<LocationsDTO>
     {
         private readonly eparkdbEntities1 _context;
+
+        private readonly List<LocationsDTO> _itemsDetails = new List<LocationsDTO>();
 
         public LocationsRepository(eparkdbEntities1 context)
         {
             _context = context;
+
+            var items = _context.locations.ToList();
+
+            foreach (var i in items)
+            {
+                _itemsDetails.Add(new LocationsDTO()
+                {
+                    Id = i.ID,
+                    County = i.County
+                });
+            }
         }
 
         public void Dispose()
@@ -18,14 +31,14 @@ namespace EParkApi.DAL
             _context.Dispose();
         }
 
-        public List<location> GetAllItems()
+        public List<LocationsDTO> GetAllItems()
         {
-            return _context.locations.ToList();
+            return _itemsDetails;
         }
 
-        public location GetItemById(int id)
+        public LocationsDTO GetItemById(int id)
         {
-            return _context.locations.Find(id);
+            return _itemsDetails.Find(s => s.Id == id);
         }
     }
 }

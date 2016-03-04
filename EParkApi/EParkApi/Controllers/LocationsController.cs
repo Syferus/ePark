@@ -8,7 +8,7 @@ namespace EParkApi.Controllers
 {
     public class LocationsController : ApiController
     {
-        private readonly IRepository<location> _repository;
+        private readonly IRepository<LocationsDTO> _repository;
 
         public LocationsController()
         {
@@ -16,7 +16,7 @@ namespace EParkApi.Controllers
         }
 
         // GET: api/locations
-        public List<location> Getlocations()
+        public List<LocationsDTO> Getlocations()
         {
             return _repository.GetAllItems();
         }

@@ -8,7 +8,7 @@ namespace EParkApi.Controllers
 {
     public class CarParksController : ApiController
     {
-        private readonly IRepository<carpark> _repository;
+        private readonly IRepository<CarParkDTO> _repository;
 
         public CarParksController()
         {
@@ -16,7 +16,7 @@ namespace EParkApi.Controllers
         }
 
         // GET: api/carparks
-        public List<carpark> Getcarparks()
+        public List<CarParkDTO> Getcarparks()
         {
             return _repository.GetAllItems();
         }
