@@ -20,27 +20,34 @@
 
         <!--Scripts-->
         <script type="text/javascript">
-        var url = "http://localhost:55095/api/locations";
+        var urlLocations = "http://eparkapp.azurewebsites.net/api/locations";
+
+        var urlCarParks = "http://eparkapp.azurewebsites.net/api/carparks";
+
+        var locationsArray = [];
+
+        var carparkArray = [];
+
 
         function clearLocations()
         {
             $('#class-list').empty();
         }
 
-        function getLocations()
+        function getData()
         {
-            alert("It Lives");
-            clearLocations();
+            $.getJSON(urlLocations).done(function(data){
+  				$.each( data, function( key, item ) {
+    			locationsArray.push(item);
+  				});
+            });
 
-            $.getJSON(uri).done(function(data){
-                £.each(data, function (key, item) {
-                    $('<li>', {text: item.ID + ':' + item.County}).appendTo(appendTo($("#class-list")));
-                });
+            $.getJSON(urlCarParks).done(function(data){
+  				$.each( data, function( key, item ) {
+    			carparkArray.push(item);
+  				});
             });
         }
-
-
-
 
         </script>
 
@@ -84,10 +91,8 @@
             height: 1000px;
             }Fd
         </style>
-
-
     </head>
-<body>
+<body onload="getData()">
 
 <div data-role="page">
 
@@ -119,15 +124,8 @@
 <h1 class="header-title">EPARK</h1>
 <a href='#' data-role="none" id="a-search"><img src="images/search-icon.png" alt="search" id="header-search-icon" /></a>
 </div>
-
-<h2>Test</h2>
-<input type="button" value="Addcounty" style="width: 50px" onclick="getLocations()"></input>
-<ul id="class-list" class="list-group"></ul>
-
-
 <div data-role="content">
 <div id="map"></div>
 </div>
-
 </body>
 </html>
