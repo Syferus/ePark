@@ -8,6 +8,7 @@
 </div>
 <button onclick="init()">Cut</button>
 <button onclick="Cut()">Save</button>
+<button onclick="Cancel()">Cancel</button>
 <input type="button" value="Finish" class="btn btn-success" onclick="success()" />
 
 <div>
@@ -35,7 +36,7 @@
             circle.x = x;
             circle.y = y;
             circle.cursor = "move";
-            circle._fill = "#7fff00";
+            circle._fill = "#ffa500";
 
             var dragging = false;
 
@@ -47,7 +48,7 @@
 
             circle.on("pressup", function(evt) {
                 if (dragging) {
-                    circle._fill = "#7fff00";
+                    circle._fill = "#ffa500";
                     drawSprite();
                     circle.stage.update();
                 }
@@ -75,7 +76,7 @@
         var counter1;
         var connectors;
         var stage;
-
+        var data;
         function resetDraw(parameters) {
             stage = new createjs.Stage("canvas");
             counter1 = 0;
@@ -83,13 +84,8 @@
             connectors = new createjs.Shape();
             nodes = new createjs.Container();
             stage.addChild(connectors, nodes);
-        }
 
-        $(document).ready(function() {
-
-            resetDraw();
-
-            stage.on("stagemousedown", function (evt) {
+            stage.on("stagemousedown", function(evt) {
                 underPoint = stage.getObjectUnderPoint(evt.stageX, evt.stageY);
                 if (!underPoint && counter1 < 4) {
                     nodes.addChild(Node(evt.stageX, evt.stageY));
@@ -106,16 +102,44 @@
                 var g = connectors.graphics;
                 g.clear();
                 g.setStrokeStyle(1);
-                g.beginStroke("#7fff00");
+                g.beginStroke("#ffa500");
                 $.each(nodes.children, function(i, node) {
                     if (i == 0) {
                         g.moveTo(node.x, node.y);
                     } else {
-                        g.lineTo(node.x, node.y)
+                        g.lineTo(node.x, node.y);
                     }
                 });
                 g.endStroke();
             });
+        }
+
+        function Cancel() {
+            resetDraw();
+            stage.update();
+            Command: toastr["warning"]("Space not saved")
+
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        }
+
+        $(document).ready(function() {
+            resetDraw();
             stage.update();
 
         });
@@ -129,7 +153,7 @@
             //$("#canvas1").css("background-image", "url(empty_carpark.jpg)");
 
             var ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             points[0] = new Array(nodes.children[0].x, nodes.children[0].y);
             points[1] = new Array(nodes.children[1].x, nodes.children[1].y);
@@ -137,7 +161,6 @@
             points[3] = new Array(nodes.children[3].x, nodes.children[3].y);
 
             drawLines();
-
         }
 
         function drawLines() {
@@ -153,7 +176,6 @@
             other();
         }
 
-        var context;
 
         function other() {
             var distA = lineDistance(points[0][0], points[0][1], points[1][0], points[1][1])
@@ -161,7 +183,7 @@
             var distC = lineDistance(points[2][0], points[2][1], points[3][0], points[3][1])
             var distD = lineDistance(points[3][0], points[3][1], points[0][0], points[0][1])
 
-            context = canvas.getContext("2d");
+            var context = canvas.getContext("2d");
 
             context.moveTo(points[0][0], points[0][1])
 
@@ -256,6 +278,25 @@
             resetDraw();
 
             allPoints.push(JSON.parse(JSON.stringify(model)));
+            Command: toastr["success"]("Space Saved")
+
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
             //success();
 
             //allPoints.push(points);
