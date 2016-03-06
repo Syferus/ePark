@@ -41,3 +41,15 @@ textarea {
 #CarParkImg{
 	width: 80%;
 }
+
+#canvas{
+	background-size: cover;
+}
+
+#myCanvas{
+	background-size: cover;
+}
+
+#myCanvas2{
+	background-size: cover;
+}
