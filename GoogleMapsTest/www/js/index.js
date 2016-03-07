@@ -33,12 +33,6 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-                var element = document.getElementById('hup');
-                element.innerHTML = 'Device Model: '    + device.model    + '<br />' +
-                                    'Device Cordova: '  + device.cordova  + '<br />' +
-                                    'Device Platform: ' + device.platform + '<br />' +
-                                    'Device UUID: '     + device.uuid     + '<br />' +
-                                    'Device Version: '  + device.version  + '<br />';
         navigator.geolocation.getCurrentPosition(app.onSuccess, app.onError);
 
     },
@@ -56,7 +50,26 @@ var app = {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
-        var map = new google.maps.Map(document.getElementById("geolocation"), mapOptions);
+        var map,
+            currentPosition,
+            directionsDisplay,
+            directionsService;
+
+        map = new google.maps.Map(document.getElementById("geolocation"), mapOptions);
+
+        directionsDisplay.setMap(map);
+
+        var currentPositionMarker = new google.maps.Marker({
+            position: currentPosition,
+            map: map,
+            title: "Current position"
+        });
+
+        var infowindow = new google.maps.InfoWindow();
+        google.maps.event.addListener(currentPositionMarker, 'click', function () {
+            infowindow.setContent("Current position: latitude: " + lat + " longitude: " + lon);
+            infowindow.open(map, currentPositionMarker);
+        });
     },
 
     onError: function(error) {
