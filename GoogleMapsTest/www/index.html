@@ -88,21 +88,35 @@
                     infowindow.open(map, currentPositionMarker);
                 });
 
-                $.getJSON("http://eparkapp.azurewebsites.net/api/carparks", callbackFuncWithData);
+                var carParkJson;
 
-				function callbackFuncWithData(data)
-				{
-				 	var parkLocationData = JSON.parse(data);
+				$.ajax({
+				    url: "http://eparkapp.azurewebsites.net/api/carparks",
+				    dataType: 'json',
+				    success: function(data) {
+				      carParkJson = data;
+				      alert("The lat is: " + data[1].Gps );
+				    },
+				    error: function() {
+				      alert("error");
+				    }
+				  });        
 
-					// $.each(parkLocationData, function(i, item) {
-					// 	map.addMarker({
-					//         lat: parkLocationData[i].Gps.lat,
-					//         lng: parkLocationData[i].Gps.lng,
-					//         animation: google.maps.Animation.DROP
-					//     });
-					// });​
+    //             $.getJSON("http://eparkapp.azurewebsites.net/api/carparks", callbackFuncWithData);
 
-				}
+				// function callbackFuncWithData(data)
+				// {
+				//  	var parkLocationData = JSON.parse(data);
+
+				// 	// $.each(parkLocationData, function(i, item) {
+				// 	// 	map.addMarker({
+				// 	//         lat: parkLocationData[i].Gps.lat,
+				// 	//         lng: parkLocationData[i].Gps.lng,
+				// 	//         animation: google.maps.Animation.DROP
+				// 	//     });
+				// 	// });​
+
+			//	}
             }
 
             function locError(error) {
