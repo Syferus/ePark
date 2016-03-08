@@ -52,17 +52,16 @@
 
     <head>
         <title>ePark</title>
-        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-        <!-- <link rel="stylesheet" href="css/jquery.mobile.custom.structure.min.css">
-        <link rel="stylesheet" href="css/jquery.mobile.custom.theme.min.css"> -->
+        <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" /> -->
+        <link rel="stylesheet" href="css/jquery.mobile.custom.structure.min.css">
+        <link rel="stylesheet" href="css/jquery.mobile.custom.theme.min.css">
 
          <link rel="stylesheet" href="css/selectize.css">
          <link rel="stylesheet" href="css/selectize.bootstrap2.css">
          <link rel="stylesheet" href="css/selectize.bootstrap3.css">
          <link rel="stylesheet" href="css/selectize.default.css">
         <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-        <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-        <!-- <script src="js/jquery.mobile.custom.min.js"></script> -->
+        <script src="js/jquery.mobile.custom.min.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDfhqrp6LNGphqO1xUNQJkLuFd0IPgmb8&callback=initMap"></script>
         <script src="js/selectize.js"></script>
 
@@ -80,7 +79,8 @@
                 </div>
                 <div data-role="fieldcontain" data-theme="d">
                     <!-- <input type="text" name="target-dest" id="target-dest" value="Enter park name here" /> -->
-                    <input type="text" id="sample-select"  placeholder="Select a location"/>
+                    <select id="sample-select"  style="width: 300">
+                        <option value="">Select a location</option>
                     </select>
                     <script>
                         
@@ -94,8 +94,6 @@
                 </div>
             </div>
         </div>
-
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&v=3&libraries=geometry"></script>
 
         <script type="text/javascript">
             var map,
@@ -129,71 +127,49 @@
                     infowindow.open(map, currentPositionMarker);
                 });
 
-            	var destinationMarker;
                 var carParkJson;
                 var selectedCarPark = {};
-                var distance = [];
-				var location;
 
-				$.ajax({
-                    url: "http://eparkapp.azurewebsites.net/api/locations",
+                var carparkGPS = {};
+
+                $.ajax({
+                    url: "http://eparkapp.azurewebsites.net/api/carparks",
                     dataType: 'json',
                     success: function(data) {
-                        location = data;
-                        $.ajax({
-		                    url: "http://eparkapp.azurewebsites.net/api/carparks",
-		                    dataType: 'json',
-		                    success: function(data) {
-		                        carParkJson = data;
-		                      // alert(JSON.stringify(carParkJson));
-		                      	$.each(carParkJson,function(i){
-		                  			carParkJson[i].Gps = JSON.parse(carParkJson[i].Gps);
-		                  			carParkJson[i].Gps = new google.maps.LatLng(carParkJson[i].Gps.lat, carParkJson[i].Gps.lng);
-		                  			if(currentPosition != null){
-		                  				carParkJson[i].distance = (google.maps.geometry.spherical.computeDistanceBetween (carParkJson[i].Gps, currentPosition));
-		                  			}
-		                  			carParkJson[i].output = carParkJson[i].Name + /*" ("+ carParkJson[i].FreeSpaces + ") "*/" 	" + (carParkJson[i].distance/1000).toFixed(1) + "km";
-		              				carParkJson[i].locationName = location.filter(function(obj){
-		                                return obj.Id == carParkJson[i].Location;
-		                            });
-		                            carParkJson[i].locationName = carParkJson[i].locationName[0].County; 
+                        carParkJson = data;
+                      // alert(JSON.stringify(carParkJson));
+                        $('#sample-select').selectize({
+                            valueField: 'Id',
+                            labelField: 'Name',
+                            searchField: 'Name',
+                            options: carParkJson,
+                            onChange: function(value){
+                                if(value > 0){
+                                    selectedCarPark = carParkJson.filter(function(obj){
+                                        return obj.Id == value;
+                                    });
 
-		                      	});
-		                        $('#sample-select').selectize({
-		                            options: carParkJson,
-		                            optgroups: location,
-		                            valueField: 'Id',
-		                            labelField: 'output',
-		                            searchField: 'Name',
-		                            sortField: 'distance',
-									optgroupField: 'locationName',
-									optgroupLabelField: 'County',
-									optgroupValueField: 'County',
-									maxItems: 1,
-		                            onChange: function(value){
-		                                if(value > 0){
-		                                    selectedCarPark = carParkJson.filter(function(obj){
-		                                        return obj.Id == value;
-		                                    });
-		                                    map = new google.maps.Map(document.getElementById('map_canvas'), {
-							                    zoom: 15,
-							                    center: selectedCarPark[0].Gps,
-							                    mapTypeId: google.maps.MapTypeId.ROADMAP
-							                });
-		                                }
-		                                else{selectedCarPark = {}};
-		                            }
-		                        });
-		                    },
-		                    error: function() {
-		                      alert("error");
-		                    }
-	                	});
+                                    selectedCarPark[0].Gps = JSON.parse(selectedCarPark[0].Gps);
+                                }
+                            }
+                        });
+
+                        $.each( carParkJson, function( key, value ) {
+
+							carparkGPS[0].Gps = JSON.parse(carParkJson[key].Gps;
+
+							var marker = new google.maps.Marker({
+						    position: carparkGPS[0].Gps,
+						    map: map,
+						    title: carParkJson[key].Name
+						  });
+						});
                     },
                     error: function() {
                       alert("error");
                     }
-				});
+                  });        
+
     //             $.getJSON("http://eparkapp.azurewebsites.net/api/carparks", callbackFuncWithData);
 
                 // function callbackFuncWithData(data)
