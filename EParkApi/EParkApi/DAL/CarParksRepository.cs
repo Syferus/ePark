@@ -24,8 +24,7 @@ namespace EParkApi.DAL
                     Name = i.Name,
                     Gps = i.GPS,
                     Location = i.Location,
-                    TotalSpaces = i.spaces.Count(),
-                    FreeSpaces = i.spaces.Count(s => s.Stat == false)
+                    FreeSpaces = i.FreeSpaces
                 });
             }
         }
