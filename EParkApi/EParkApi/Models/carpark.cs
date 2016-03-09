@@ -18,7 +18,8 @@ namespace EParkApi.Models
         public string Resolution { get; set; }
         public short Frequency { get; set; }
         public string ImageName { get; set; }
-    
+        public int FreeSpaces { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<space> spaces { get; set; }
         public virtual location location1 { get; set; }
