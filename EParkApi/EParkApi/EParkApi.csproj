@@ -181,7 +181,7 @@
     <Compile Include="Models\carpark.cs">
       <DependentUpon>EParkModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CarParkDTO.cs" />
+    <Compile Include="Models\DTO\CarParkDTO.cs" />
     <Compile Include="Models\EParkModels.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -200,7 +200,7 @@
     <Compile Include="Models\location.cs">
       <DependentUpon>EParkModels.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\LocationsDTO.cs" />
+    <Compile Include="Models\DTO\LocationsDTO.cs" />
     <Compile Include="Models\space.cs">
       <DependentUpon>EParkModels.tt</DependentUpon>
     </Compile>
@@ -301,7 +301,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55095</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:55095/</IISUrl>
+          <IISUrl>http://localhost:60000/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
