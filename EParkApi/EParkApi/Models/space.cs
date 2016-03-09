@@ -16,7 +16,5 @@ namespace EParkApi.Models
         public float y3 { get; set; }
         public float x4 { get; set; }
         public float y4 { get; set; }
-    
-        public virtual carpark carpark1 { get; set; }
     }
 }

@@ -16,7 +16,8 @@
           <Property Name="Resolution" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Frequency" Type="smallint" Nullable="false" />
           <Property Name="ImageName" Type="varchar" MaxLength="25" Nullable="false" />
-          <Property Name="FreeSpaces" Type="int" />
+          <Property Name="FreeSpaces" Type="int" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="70" Nullable="false" />
         </EntityType>
         <EntityType Name="locations">
           <Key>
@@ -82,20 +83,32 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="eparkdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="eparkdbEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="carparks" EntityType="eparkdbModel.carpark" />
+          <EntitySet Name="locations" EntityType="eparkdbModel.location" />
+          <EntitySet Name="spaces" EntityType="eparkdbModel.space" />
+          <AssociationSet Name="CarPark1" Association="eparkdbModel.CarPark1">
+            <End Role="carpark" EntitySet="carparks" />
+            <End Role="space" EntitySet="spaces" />
+          </AssociationSet>
+          <AssociationSet Name="Location1" Association="eparkdbModel.Location1">
+            <End Role="location" EntitySet="locations" />
+            <End Role="carpark" EntitySet="carparks" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="carpark">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="GPS" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GPS" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
           <Property Name="Location" Type="Int32" Nullable="false" />
-          <Property Name="Resolution" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Resolution" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Frequency" Type="Int16" Nullable="false" />
-          <Property Name="ImageName" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="spaces" Relationship="Self.CarPark1" FromRole="carparks" ToRole="spaces" />
-          <NavigationProperty Name="location1" Relationship="Self.Location1" FromRole="carparks" ToRole="locations" />
-          <Property Name="FreeSpaces" Type="Int32" />
+          <Property Name="ImageName" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="FreeSpaces" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="location">
           <Key>
@@ -103,7 +116,6 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="County" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="carparks" Relationship="Self.Location1" FromRole="locations" ToRole="carparks" />
         </EntityType>
         <EntityType Name="space">
           <Key>
@@ -120,45 +132,31 @@
           <Property Name="y3" Type="Single" Nullable="false" />
           <Property Name="x4" Type="Single" Nullable="false" />
           <Property Name="y4" Type="Single" Nullable="false" />
-          <NavigationProperty Name="carpark1" Relationship="Self.CarPark1" FromRole="spaces" ToRole="carparks" />
         </EntityType>
         <Association Name="CarPark1">
-          <End Role="carparks" Type="Self.carpark" Multiplicity="1" />
-          <End Role="spaces" Type="Self.space" Multiplicity="*" />
+          <End Type="eparkdbModel.carpark" Role="carpark" Multiplicity="1" />
+          <End Type="eparkdbModel.space" Role="space" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="carparks">
+            <Principal Role="carpark">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="spaces">
+            <Dependent Role="space">
               <PropertyRef Name="CarPark" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="Location1">
-          <End Role="locations" Type="Self.location" Multiplicity="1" />
-          <End Role="carparks" Type="Self.carpark" Multiplicity="*" />
+          <End Type="eparkdbModel.location" Role="location" Multiplicity="1" />
+          <End Type="eparkdbModel.carpark" Role="carpark" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="locations">
+            <Principal Role="location">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="carparks">
+            <Dependent Role="carpark">
               <PropertyRef Name="Location" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="eparkdbEntities1" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="carparks" EntityType="Self.carpark" />
-          <EntitySet Name="locations" EntityType="Self.location" />
-          <EntitySet Name="spaces" EntityType="Self.space" />
-          <AssociationSet Name="CarPark" Association="Self.CarPark1">
-            <End Role="carparks" EntitySet="carparks" />
-            <End Role="spaces" EntitySet="spaces" />
-          </AssociationSet>
-          <AssociationSet Name="Location" Association="Self.Location1">
-            <End Role="locations" EntitySet="locations" />
-            <End Role="carparks" EntitySet="carparks" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -168,39 +166,40 @@
           <EntitySetMapping Name="carparks">
             <EntityTypeMapping TypeName="eparkdbModel.carpark">
               <MappingFragment StoreEntitySet="carparks">
+                <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="FreeSpaces" ColumnName="FreeSpaces" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="GPS" ColumnName="GPS" />
-                <ScalarProperty Name="Location" ColumnName="Location" />
-                <ScalarProperty Name="Resolution" ColumnName="Resolution" />
-                <ScalarProperty Name="Frequency" ColumnName="Frequency" />
                 <ScalarProperty Name="ImageName" ColumnName="ImageName" />
+                <ScalarProperty Name="Frequency" ColumnName="Frequency" />
+                <ScalarProperty Name="Resolution" ColumnName="Resolution" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="GPS" ColumnName="GPS" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="locations">
             <EntityTypeMapping TypeName="eparkdbModel.location">
               <MappingFragment StoreEntitySet="locations">
-                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="County" ColumnName="County" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="spaces">
             <EntityTypeMapping TypeName="eparkdbModel.space">
               <MappingFragment StoreEntitySet="spaces">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="CarPark" ColumnName="CarPark" />
-                <ScalarProperty Name="Stat" ColumnName="Stat" />
-                <ScalarProperty Name="x1" ColumnName="x1" />
-                <ScalarProperty Name="y1" ColumnName="y1" />
-                <ScalarProperty Name="x2" ColumnName="x2" />
-                <ScalarProperty Name="y2" ColumnName="y2" />
-                <ScalarProperty Name="x3" ColumnName="x3" />
-                <ScalarProperty Name="y3" ColumnName="y3" />
-                <ScalarProperty Name="x4" ColumnName="x4" />
                 <ScalarProperty Name="y4" ColumnName="y4" />
+                <ScalarProperty Name="x4" ColumnName="x4" />
+                <ScalarProperty Name="y3" ColumnName="y3" />
+                <ScalarProperty Name="x3" ColumnName="x3" />
+                <ScalarProperty Name="y2" ColumnName="y2" />
+                <ScalarProperty Name="x2" ColumnName="x2" />
+                <ScalarProperty Name="y1" ColumnName="y1" />
+                <ScalarProperty Name="x1" ColumnName="x1" />
+                <ScalarProperty Name="Stat" ColumnName="Stat" />
+                <ScalarProperty Name="CarPark" ColumnName="CarPark" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -7,5 +7,6 @@
         public string Gps { get; set; }
         public int Location { get; set; }
         public int FreeSpaces { get; set; }
+        public string Address { get; set; }
     }
 }

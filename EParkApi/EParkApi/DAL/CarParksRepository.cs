@@ -24,7 +24,8 @@ namespace EParkApi.DAL
                     Name = i.Name,
                     Gps = i.GPS,
                     Location = i.Location,
-                    FreeSpaces = i.FreeSpaces
+                    FreeSpaces = i.FreeSpaces,
+                    Address = i.Address
                 });
             }
         }
