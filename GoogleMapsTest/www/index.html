@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <!--
     Copyright (c) 2012-2014 Adobe Systems Incorporated. All rights reserved.
 
@@ -19,46 +18,17 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<!-- 
-
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
-    </head>
-    <body>
-    <h1 id="hup"></h1>
-    <div id="geolocation" style="width: 750px; height: 1334px;">
-    </div>
-    <script type="text/javascript" src="cordova.js"> </script>
-    <script type="text/javascript" src="js/index.js"> </script>
-	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCDfhqrp6LNGphqO1xUNQJkLuFd0IPgmb8&sensor=false"> </script>
-    <script type="text/javascript">
-    	app.initialize();
-    </script>
-    </body>
-</html> -->
-
-
-
-
 <!doctype html>
 <html lang="en">
 
     <head>
         <title>ePark</title>
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-  
-
-         <link rel="stylesheet" href="css/selectize.css">
-         <link rel="stylesheet" href="css/selectize.bootstrap2.css">
-         <link rel="stylesheet" href="css/selectize.bootstrap3.css">
-         <link rel="stylesheet" href="css/selectize.default.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/selectize.css">
+        <link rel="stylesheet" href="css/selectize.bootstrap2.css">
+        <link rel="stylesheet" href="css/selectize.bootstrap3.css">
+        <link rel="stylesheet" href="css/selectize.default.css">
         <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDfhqrp6LNGphqO1xUNQJkLuFd0IPgmb8&callback=initMap"></script>
@@ -69,8 +39,7 @@
     <body onload="init();">
         <div id="basic-map" data-role="page" data-theme="d">
             <div data-role="header" data-theme="d">
-                 <h1>ePark</h1>
-                 <a href="#page4" class="ui-btn-left" data-icon="back" data-iconpos="notext" data-direction="reverse">Events</a> 
+                 <h1>EPARKiiii</h1>
             </div>
             <div data-role="content" data-theme="d">
                 <div class="ui-bar-c ui-corner-all ui-shadow" style="padding:1em;">
@@ -101,11 +70,22 @@
 
                 currentPosition = new google.maps.LatLng(lat, lon);
 
-                map = new google.maps.Map(document.getElementById('map_canvas'), {
-                    zoom: 15,
-                    center: currentPosition,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                });
+                var mapCanvas = document.getElementById('map_canvas');
+        		var styles = [{"elementType":"geometry","stylers":[{"hue":"#ff4400"},{"saturation":-68},{"lightness":-4},{"gamma":0.72}]},{"featureType":"road","elementType":"labels.icon"},{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"hue":"#0077ff"},{"gamma":3.1}]},{"featureType":"water","stylers":[{"hue":"#00ccff"},{"gamma":0.44},{"saturation":-33}]},{"featureType":"poi.park","stylers":[{"hue":"#44ff00"},{"saturation":-23}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"hue":"#007fff"},{"gamma":0.77},{"saturation":65},{"lightness":99}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"gamma":0.11},{"weight":5.6},{"saturation":99},{"hue":"#0091ff"},{"lightness":-86}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"lightness":-48},{"hue":"#ff5e00"},{"gamma":1.2},{"saturation":-23}]},{"featureType":"transit","elementType":"labels.text.stroke","stylers":[{"saturation":-64},{"hue":"#ff9100"},{"lightness":16},{"gamma":0.47},{"weight":2.7}]}];
+
+    			var styledMap = new google.maps.StyledMapType(styles, {name: "Styled Map"});
+
+		    	var mapOptions = {
+		                    mapTypeControl:false,
+		                    zoom: 15,
+		                    center: currentPosition,
+		                    streetViewControl: false,
+		                    mapTypeId: google.maps.MapTypeId.ROADMAP
+		        }
+		        map = new google.maps.Map(mapCanvas, mapOptions)
+
+		        map.mapTypes.set('map_style', styledMap);
+		        map.setMapTypeId('map_style');
 
                 directionsDisplay.setMap(map);
 
@@ -120,30 +100,8 @@
                     infowindow.setContent("Current position: latitude: " + lat + " longitude: " + lon);
                     infowindow.open(map, currentPositionMarker);
                 });
-
-
 				
                 loadDropDown();
-
-
-
-				
-
-    //             $.getJSON("http://eparkapp.azurewebsites.net/api/carparks", callbackFuncWithData);
-
-                // function callbackFuncWithData(data)
-                // {
-                //      var parkLocationData = JSON.parse(data);
-
-                //  // $.each(parkLocationData, function(i, item) {
-                //  //  map.addMarker({
-                //  //         lat: parkLocationData[i].Gps.lat,
-                //  //         lng: parkLocationData[i].Gps.lng,
-                //  //         animation: google.maps.Animation.DROP
-                //  //     });
-                //  // });​
-
-            //  }
             }
 
             function loadDropDown()
@@ -229,7 +187,7 @@
             }
 
             function locError(error) {
-                // initialize map with a static predefined latitude, longitude
+                // init map with a static lat lng
                 initialize(59.3426606750, 18.0736160278);
             }
 
