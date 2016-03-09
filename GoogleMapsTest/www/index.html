@@ -39,7 +39,7 @@
     <body onload="init();">
         <div id="basic-map" data-role="page" data-theme="d">
             <div data-role="header" data-theme="d">
-                 <h1>EPARKiiii</h1>
+                 <h1>EPARK</h1>
             </div>
             <div data-role="content" data-theme="d">
                 <div class="ui-bar-c ui-corner-all ui-shadow" style="padding:1em;">
@@ -95,9 +95,25 @@
                     title: "Current position"
                 });
 
+                var content = '<div id="iw-container">' +
+                    '<div class="iw-title">IT Sligo</div>' +
+                    '<div class="iw-content">' +
+                      '<div class="iw-subTitle">Synopsis</div>' +
+                      '<p>2 Free Spaces</p>' +
+                      '<p>Ballinode, Sligo, Ireland<br>'+
+                      '</div>' +
+                    '<div class="iw-bottom-gradient"></div>' +
+                  '</div>';
+
+				  var infowindow = new google.maps.InfoWindow({
+				    content: content,
+				    maxWidth: 150
+				  });
+
                 var infowindow = new google.maps.InfoWindow();
                 google.maps.event.addListener(currentPositionMarker, 'click', function () {
-                    infowindow.setContent("Current position: latitude: " + lat + " longitude: " + lon);
+               //     infowindow.setContent("Current position: latitude: " + lat + " longitude: " + lon);
+               		infowindow.setContent(content);
                     infowindow.open(map, currentPositionMarker);
                 });
 				
