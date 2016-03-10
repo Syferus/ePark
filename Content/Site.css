@@ -1,0 +1,42 @@
+﻿/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    width: 80%;
+    background-color: #5d5d5d;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    .jumbotron {
+        margin-top: 20px;
+    }
+}
+
+#div1 {
+    padding-left: 50px;
+}
+
+#CarParkImg {
+    width: 80%;
+}
+
+#canvas {
+    background-size: cover;
+}
+
+#myCanvas {
+    background-size: cover;
+}
+
+#myCanvas2 {
+    background-size: cover;
+}
