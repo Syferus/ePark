@@ -91,8 +91,8 @@
 		                    center: currentPosition,
 		                    streetViewControl: false,
 		                    mapTypeId: google.maps.MapTypeId.ROADMAP
-		        }
-		        map = new google.maps.Map(mapCanvas, mapOptions)
+		        };
+		        map = new google.maps.Map(mapCanvas, mapOptions);
 
 		        map.mapTypes.set('map_style', styledMap);
 		        map.setMapTypeId('map_style');
@@ -113,10 +113,6 @@
                     '<div class="iw-bottom-gradient"></div>' +
                   '</div>';
 
-				  var infowindow = new google.maps.InfoWindow({
-				    content: content,
-				    maxWidth: 150
-				  });
 
                 var infowindow = new google.maps.InfoWindow();
                 google.maps.event.addListener(currentPositionMarker, 'click', function () {
@@ -203,15 +199,14 @@
 				                            });
 				                            calculateRoute(selectedCarPark[0].Gps);
 				                        }
-				                        else{selectedCarPark = {}};se
+				                        else{selectedCarPark = {}}
 				                    }
 				                });
 				                $select.selectize();
 								$.each(markers,function(i){
 									var marker = markers[i];
-		                            var infowindow = new google.maps.InfoWindow();
 
-		 			               google.maps.event.addListener(marker, 'click', function (e) {
+		 			                google.maps.event.addListener(marker, 'click', function () {
 					               
        								var myLatlng = new google.maps.LatLng(this.position.lat(), this.position.lng());
 			               				calculateRoute(myLatlng);
@@ -228,7 +223,7 @@
 		        setTimeout(loadDropDown, 3000);
             }
 
-            function locError(error) {
+            function locError() {
                 // init map with a static lat lng
                 initialize(59.3426606750, 18.0736160278);
             }
@@ -269,7 +264,7 @@
         <script type="text/javascript">
             var showGeolocationInfo = function() {
                 navigator.geolocation.getCurrentPosition(locSuccess, locError);
-            }
+            };
             function init(){
                 document.addEventListener("deviceready", showGeolocationInfo, true);
             }
