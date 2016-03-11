@@ -73,7 +73,7 @@
                 directionsDisplay,
                 directionsService;
             var selectedCarPark = {};
-
+            var markers = [];
             function initialize(lat, lon) {
                 directionsDisplay = new google.maps.DirectionsRenderer();
                 directionsService = new google.maps.DirectionsService();
@@ -163,15 +163,26 @@
 
 		                  			var markerIcon;
 		                  			if (carParkJson[i].FreeSpaces > 0) {
-									    markerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+carParkJson[i].FreeSpaces+'|00FF00|000000' 
-									    }else {markerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=0|FF0000|000000'}
+									   if (carParkJson[i].FreeSpaces <= 3){
+											markerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+carParkJson[i].FreeSpaces+'|FFA500|000000' 
+									   }else{
+									   		markerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='+carParkJson[i].FreeSpaces+'|00FF00|000000' 
+									   }
+								    }else {
+								    	markerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=0|FF0000|000000'
+								    }
 
-									var marker = new google.maps.Marker({
+									markers.push(new google.maps.Marker({
 									    position: carParkJson[i].Gps,
 									    map: map,
 									    title: carParkJson[i].Name,
 									    icon: markerIcon
-									  });
+									  }));
+
+	
+				
+                				loadDropDown();
+
 		                      	});
                       			
 		              	    	var $select = $('#sample-select').selectize({
@@ -196,16 +207,21 @@
 				                    }
 				                });
 				                $select.selectize();
+								$.each(markers,function(i){
+									var marker = markers[i];
+		                            var infowindow = new google.maps.InfoWindow();
 
+		 			               google.maps.event.addListener(marker, 'click', function (e) {
+					               
+       								var myLatlng = new google.maps.LatLng(this.position.lat(), this.position.lng());
+			               				calculateRoute(myLatlng);
+					                });    
+							 
+							            
+								});
 
-		                    },
-		                    error: function() {
-		                      alert("error with carparks");
 		                    }
 		            	});
-		            },
-		            error: function() {
-		              alert("error with locations");
 		            }
 				});
 
